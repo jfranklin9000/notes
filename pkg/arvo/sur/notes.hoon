@@ -23,9 +23,15 @@
   $:  all-notes=notes
   ==
 ::
-+$  state-versions
-  $%  [%0 s=state-0]
++$  state-1
+  $:  all-notes=notes
+      all-keys=keys
   ==
 ::
-+$  state  [%0 s=state-0]  ::  current
++$  state-versions
+  $%  [%0 s=state-0]
+      [%1 s=state-1]
+  ==
+::
++$  state  [%1 s=state-1]  ::  current
 --

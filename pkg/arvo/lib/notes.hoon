@@ -248,7 +248,18 @@
   ::  saved's type is a union of all state
   ::  definitions, not a specific one
   =/  saved  !<(state-versions vase)
+  =?  saved  ?=(%0 -.saved)
+    (state-0-to-1 s.saved)
+  ?>  ?=(%1 -.saved)
   ::  manually build product of a specific
   ::  state definition, not the union one
-  [%0 s=s.saved]
+  [%1 s=s.saved]
+::
+++  state-0-to-1
+  ~&  %state-0-to-1
+  |=  =state-0
+  =|  =state-1
+  =.  all-notes.state-1  all-notes.state-0
+  =.  all-keys.state-1   (get-keys-all all-notes.state-0)
+  [%1 s=state-1]
 --

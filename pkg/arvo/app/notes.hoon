@@ -13,6 +13,7 @@
     def   ~(. (default-agent this %|) bowl)
     ::
     all-notes  all-notes.s.state
+    all-keys   all-keys.s.state
 ::
 ++  on-init
   ~&  >  %notes-on-init
@@ -35,6 +36,8 @@
       `this
     %add
       =.  all-notes  (snoc all-notes note.command)
+      =.  all-keys  %+  weld  all-keys
+        (get-keys-no-match keys.note.command all-keys)
       `this
     %search
       ~&  (search-notes keys.command all-notes)
