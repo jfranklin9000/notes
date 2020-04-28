@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import classnames from 'classnames';
 // import _ from 'lodash';
 
-export default class udoneditTile extends Component {
+export default class notesTile extends Component {
 
   // constructor(props) {
   //   super(props);
@@ -28,4 +28,4 @@ export default class udoneditTile extends Component {
 
 }
 
-window.udoneditTile = udoneditTile;
+window.notesTile = notesTile;

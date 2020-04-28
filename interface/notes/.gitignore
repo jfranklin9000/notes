@@ -1,3 +1,4 @@
+.urbitrc
 dist
 node_modules
 zod*
