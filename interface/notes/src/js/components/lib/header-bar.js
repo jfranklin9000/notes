@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { cite } from '../../lib/util';
-import { IconHome } from "/components/lib/icons/icon-home";
-import { Sigil } from "/components/lib/icons/sigil";
+import { IconHome } from '/components/lib/icons/icon-home';
+import { Sigil } from '/components/lib/icons/sigil';
 
 export class HeaderBar extends Component {
   render() {

@@ -2,10 +2,9 @@
 // import { ConfigReducer } from '/reducers/config';
 // import { UpdateReducer } from '/reducers/update';
 
-
 class Store {
     constructor() {
-        // console.log('src/js/store.js constructor()');
+        // console.log('Store constructor()');
         this.state = {
             source: '',    // udon
             object: '',    // html
@@ -19,12 +18,12 @@ class Store {
     }
 
     setStateHandler(setState) {
-        // console.log('src/js/store.js setStateHandler()', setState);
+        // console.log('Store setStateHandler()', setState);
         this.setState = setState;
     }
 
     handleEvent(data) {
-        // console.log('src/js/store.js handleEvent()', data);
+        // console.log('Store handleEvent()', data);
         let json = data.data;
 
         // this.initialReducer.reduce(json, this.state);

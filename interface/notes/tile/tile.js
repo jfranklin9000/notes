@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-// import classnames from 'classnames';
-// import _ from 'lodash';
 
 export default class notesTile extends Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   // console.log('notesTile.constructor()', props);
-  // }
+  constructor(props) {
+    // console.log('notesTile constructor()', props);
+    super(props);
+  }
 
   render() {
     return (

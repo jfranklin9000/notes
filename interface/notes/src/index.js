@@ -5,7 +5,7 @@ import { api } from '/api';
 // import { store } from '/store';
 import { subscription } from '/subscription';
 
-console.log("hello from notes");
+console.log('hello from notes');
 
 api.setAuthTokens({
   ship: window.ship

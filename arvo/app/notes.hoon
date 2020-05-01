@@ -31,9 +31,9 @@
   /|  /css/
       /~  ~
   ==
-::  /=  notes-png
-::    /^  (map knot @)
-::    /:  /===/app/notes/img  /_  /png/
+/=  notes-png
+  /^  (map knot @)
+  /:  /===/app/notes/img  /_  /png/
 ::
 =,  notes
 ::
@@ -75,8 +75,6 @@
   ++  on-poke
     ~&  >  %notes-on-poke
     |=  [=mark =vase]
-    ::  ~&  [mark=mark vase=vase]
-::
     ^-  (quip card _this)
     ?>  (team:title our.bowl src.bowl)
     ?+    mark  (on-poke:def mark vase)
@@ -86,6 +84,11 @@
       %+  give-simple-payload:app  eyre-id
       %+  require-authorization:app  inbound-request
       poke-handle-http-request:nc
+      ::
+        %json
+      =/  put  ((om:dejs:format same) !<(json vase))
+      ~&  put=put
+      `this  ::  FIXME
     ==
 ::
 ::::  ::  we want these:
@@ -110,10 +113,9 @@
     ^-  (quip card _this)
     ?:  ?=([%http-response *] path)
       `this
-    ?.  =(/ path)
+    ?.  =(/primary path)
       (on-watch:def path)
-    ::  https://github.com/urbit/create-landscape-app/issues/23 ???
-    [[%give %fact ~ %json !>(*json)]~ this]
+    `this  ::  FIXME
   ::
   ++  on-arvo
     ~&  >  %notes-on-arvo
@@ -129,6 +131,7 @@
   ++  on-fail   ~&  >  %notes-on-fail   on-fail:def
   --
 ::
+::
 |_  =bowl:gall
 ::
 ++  poke-handle-http-request
@@ -140,13 +143,14 @@
       [%'~notes' %js %tile ~]    (js-response:gen tile-js)
       [%'~notes' %js %index ~]   (js-response:gen script)
   ::
-::      [%'~notes' %img @t *]
-::    =/  name=@t  i.t.t.site.url
-::    =/  img  (~(get by notes-png) name)
-::    ?~  img
-::      not-found:gen
-::    (png-response:gen (as-octs:mimes:html u.img))
+      [%'~notes' %img @t *]
+    =/  name=@t  i.t.t.site.url
+    =/  img  (~(get by notes-png) name)
+    ?~  img
+      not-found:gen
+    (png-response:gen (as-octs:mimes:html u.img))
   ::
       [%'~notes' *]  (html-response:gen index)
   ==
+::
 --

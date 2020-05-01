@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 export class IconHome extends Component {
   render() {
@@ -6,7 +6,7 @@ export class IconHome extends Component {
     return (
       <img
         className={"invert-d " + classes}
-        src="/~udonedit/img/Home.png"
+        src="/~notes/img/Home.png"
         width={16}
         height={16}
       />
