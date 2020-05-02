@@ -6,9 +6,12 @@ class Store {
     constructor() {
         // console.log('Store constructor()');
         this.state = {
+            // udonedit, toss
             source: '',    // udon
             object: '',    // html
-            edited: false  // source and object are consistent
+            edited: false,  // source and object are consistent
+            // notes
+            keys: ''
         };
 
         // this.initialReducer = new InitialReducer();
@@ -23,15 +26,18 @@ class Store {
     }
 
     handleEvent(data) {
-        // console.log('Store handleEvent()', data);
+        console.log('Store handleEvent()', data);
         let json = data.data;
 
         // this.initialReducer.reduce(json, this.state);
         // this.configReducer.reduce(json, this.state);
         // this.updateReducer.reduce(json, this.state);
+        // udonedit, toss
         this.state.source = json.state.source;
         this.state.object = json.state.object;
         this.state.edited = false;
+        // notes
+        this.state.keys = json.state.keys;  // we already have these?
         this.setState(this.state);
     }
 }

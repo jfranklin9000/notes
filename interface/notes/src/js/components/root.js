@@ -7,10 +7,24 @@ export class Root extends Component {
   constructor(props) {
     // console.log('Root constructor()', props);
     super(props);
-    // see Udonedit FIXME
+    this.state = store.state;
+    store.setStateHandler(this.setState.bind(this));
+  }
+
+  keys(event) {
+    // console.log('Root keys()', event.target.value);
+    this.setState({ keys: event.target.value });
+  }
+
+  search() {
+    // console.log('Root search()', this.state);
+    api.action('notes', 'json',
+      { action: 'search', keys: this.state.keys });
   }
 
   render() {
+
+    console.log('Root render()', this.state);
 
     return (
       <BrowserRouter>
@@ -19,10 +33,25 @@ export class Root extends Component {
           <Route exact path="/~notes" render={ () => {
             return (
               <div className="cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden">
-                <h1 className="mt0 f8 fw4">Notes</h1>
-                <p className="lh-copy measure pt3">Welcome to your Landscape application.</p>
-                <p className="lh-copy measure pt3">To get started, edit <code>src/index.js</code>, <code>tile/tile.js</code> or <code>arvo/app/notes.hoon</code> and <code>|commit %home</code> on your Urbit ship to see your changes.</p>
-                <a className="black no-underline db f8 pt3" href="https://urbit.org/docs">-> Read the docs</a>
+
+                <p style={{ fontSize: 1.0 + 'rem', color: 'lightgray' }}>
+                  Search notes with keywords
+                </p>
+
+                {/* do we want to set value here? */}
+                <input style={{ background: 'lightgray',
+                                fontSize: 1.5 + 'rem',
+                                marginTop: 0.5 + 'rem' }}
+                       value={ this.state.keys }
+                       onChange={ this.keys.bind(this) }
+                />
+
+                <button className="mt3 fr f4"
+                        style={{ color: 'lightgray', cursor: 'pointer' }}
+                        onClick={ this.search.bind(this) }>
+                  Search
+                </button>
+
               </div>
             )}}
           />

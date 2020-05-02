@@ -41,6 +41,28 @@
 ::
 |%
 +$  card  card:agent:gall
+::
+::  +keys-from-cord
+::
+::    add comment about cord to @tas
+::    (look at +sane)
+::
+++  keys-from-cord
+  |=  =cord
+  ^-  keys
+  =/  =tape  (trip cord)
+  =|  =keys
+  =|  key=^tape
+  |-
+    ?~  tape
+      ?~  key
+        keys
+      (snoc keys (crip key))
+    ?.  =(i.tape ' ')
+      $(tape t.tape, key (snoc key i.tape))
+    ?~  key
+      $(tape t.tape)
+    $(tape t.tape, key ~, keys (snoc keys (crip key)))
 --
 ::
 ^-  agent:gall
@@ -87,10 +109,15 @@
       poke-handle-http-request:nc
     ::
         %json
-      ::  =+  (put=(om:dejs:format same) !<(json vase))  ::  use this
       =/  put  ((om:dejs:format same) !<(json vase))
-      ~&  put=put
-      `this  ::  FIXME
+      =/  act  (so:dejs:format (~(got by put) %action))
+      ?:  =(act 'search')
+        =/  =keys  %-  keys-from-cord
+          (so:dejs:format (~(got by put) %keys))
+        ~&  (search-notes keys all-notes)
+        `this  ::  FIXME
+      ~&  >>  [%notes-unknown-action act]
+      `this
     ::
         %noun
       ~&  vase
