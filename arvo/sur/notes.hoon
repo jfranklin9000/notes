@@ -12,9 +12,9 @@
 +$  all-not-all  [all=notes not-all=notes]  ::  internal
 ::
 +$  command
-  $%  [%dump ~]
-      [%add =note]
+  $%  [%add =note]
       [%search =keys]
+      [%dump ~]
   ==
 ::
 ::  state definitions

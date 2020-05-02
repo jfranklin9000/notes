@@ -73,42 +73,48 @@
     `this(state (prepare-state vase))
   ::
   ++  on-poke
-    ~&  >  %notes-on-poke
+    ::  ~&  >  %notes-on-poke
     |=  [=mark =vase]
     ^-  (quip card _this)
     ?>  (team:title our.bowl src.bowl)
     ?+    mark  (on-poke:def mark vase)
+    ::
         %handle-http-request
       =+  !<([eyre-id=@ta =inbound-request:eyre] vase)
       :_  this
       %+  give-simple-payload:app  eyre-id
       %+  require-authorization:app  inbound-request
       poke-handle-http-request:nc
-      ::
+    ::
         %json
+      ::  =+  (put=(om:dejs:format same) !<(json vase))  ::  use this
       =/  put  ((om:dejs:format same) !<(json vase))
       ~&  put=put
       `this  ::  FIXME
+    ::
+        %noun
+      ~&  vase
+      =+  !<(com=command vase)
+      ?-    -.com
+      ::
+          %add
+        =.  all-notes  (snoc all-notes note.com)
+        =.  all-keys  %+  weld  all-keys
+          (get-keys-no-match keys.note.com all-keys)
+        `this
+      ::
+          %search
+        ~&  (search-notes keys.com all-notes)
+        `this
+      ::
+          %dump
+        ~&  state=state
+        `this
+      ==
     ==
-::
-::::  ::  we want these:
-::::    =/  =command  !<(command vase)
-::::    ?-  -.command
-::::      %dump
-::::        ~&  state
-::::        `this
-::::      %add
-::::        =.  all-notes  (snoc all-notes note.command)
-::::        =.  all-keys  %+  weld  all-keys
-::::          (get-keys-no-match keys.note.command all-keys)
-::::        `this
-::::      %search
-::::        ~&  (search-notes keys.command all-notes)
-::::        `this
-::::    ==
   ::
   ++  on-watch
-    ~&  >  %notes-on-watch
+    ::  ~&  >  %notes-on-watch
     |=  =path
     ^-  (quip card _this)
     ?:  ?=([%http-response *] path)
