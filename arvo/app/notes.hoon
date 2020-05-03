@@ -46,6 +46,7 @@
 ::
 ::    add comment about cord to @tas
 ::    (look at +sane)
+::    (move to lib/notes.hoon) XX
 ::
 ++  keys-from-cord
   |=  =cord
@@ -63,6 +64,37 @@
     ?~  key
       $(tape t.tape)
     $(tape t.tape, key ~, keys (snoc keys (crip key)))
+::
+++  keys-to-json
+  |=  =keys
+  ^-  json
+  a+(turn keys |=(=key s+key))
+::
+++  note-to-json
+  |=  =note
+  ^-  json
+  %-  pairs:enjs:format
+  :~  ['keys' (keys-to-json keys.note)]
+      ['text' (tape:enjs:format text.note)]
+  ==
+::
+++  notes-to-json
+  |=  =notes
+  ^-  json
+  a+(turn notes |=(=note (note-to-json note)))
+::
+++  match-to-json
+  |=  =match
+  ^-  json
+  %-  pairs:enjs:format
+  :~  ['keys' (keys-to-json keys.match)]
+      ['notes' (notes-to-json notes.match)]
+  ==
+::
+++  search-to-json
+  |=  =search
+  ^-  json
+  a+(turn search |=(=match (match-to-json match)))
 --
 ::
 ^-  agent:gall
@@ -112,10 +144,16 @@
       =/  put  ((om:dejs:format same) !<(json vase))
       =/  act  (so:dejs:format (~(got by put) %action))
       ?:  =(act 'search')
-        =/  =keys  %-  keys-from-cord
+        =/  keywords=cord
           (so:dejs:format (~(got by put) %keys))
-        ~&  (search-notes keys all-notes)
-        `this  ::  FIXME
+        =/  =keys  (keys-from-cord keywords)
+        =/  =search  (search-notes keys all-notes)
+        =/  =json  %-  pairs:enjs:format
+          :~  ['keys' s+keywords]  ::  original
+              ['search' (search-to-json search)]
+          ==
+        :_  this
+        [%give %fact ~[/primary] %json !>(json)]~
       ~&  >>  [%notes-unknown-action act]
       `this
     ::
