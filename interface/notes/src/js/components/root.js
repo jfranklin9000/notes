@@ -22,6 +22,29 @@ export class Root extends Component {
       { action: 'search', keys: this.state.keys });
   }
 
+  // should be a Component? FIXME
+  matches() {
+    // console.log('Root matches()', this.state);
+    if (this.state.search === null)
+      return '<p><i>no matches</i></p>';
+
+    let matches = this.state.search.map(function(match) {
+      // console.log('match', match);
+
+      // let keys = '<span>' + match.keys.join(' ') + '</span>';
+      // console.log('keys', keys);
+
+      let notes = match.notes.map(function(note) {
+        return '<p>' + note.text + '</p>';
+      });
+      // console.log('notes', notes);
+
+      return '<div>' + notes.join('\n') + '</div>'
+    });
+
+    return matches.join('<br>');
+  }
+
   render() {
 
     console.log('Root render()', this.state);
@@ -51,6 +74,9 @@ export class Root extends Component {
                         onClick={ this.search.bind(this) }>
                   Search
                 </button>
+
+                <div dangerouslySetInnerHTML={{ __html: this.matches() }}>
+                </div>
 
               </div>
             )}}
