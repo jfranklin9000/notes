@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { HeaderBar } from './lib/header-bar.js'
 
 export class Root extends Component {
@@ -23,7 +23,7 @@ export class Root extends Component {
   }
 
   text() {
-    console.log('Root text()', event.target.value);
+    // console.log('Root text()', event.target.value);
     this.setState({ text: event.target.value });
   }
 
@@ -31,7 +31,12 @@ export class Root extends Component {
     // console.log('Root add()', this.state);
     api.action('notes', 'json',
       { action: 'add', keys: this.state.keys, text: this.state.text });
-    // need a redirect to /~notes/edit (do in store.js?) XX
+
+    // need a redirect to /~notes/edit (/~notes for now)
+    // could not get this to work XX
+    // return <Redirect to='/~notes' />;
+    // yeesh, probably not right, but it works
+    window.location.replace("/~notes");
   }
 
   // should be a Component? FIXME
@@ -59,8 +64,9 @@ export class Root extends Component {
   }
 
   render() {
+    const { props, state } = this; // move up?
 
-    console.log('Root render()', this.state);
+    console.log('Root render()', state, props);
 
     return (
       <BrowserRouter>
@@ -78,7 +84,7 @@ export class Root extends Component {
                 <input style={{ background: 'lightgray',
                                 fontSize: 1.5 + 'rem',
                                 marginTop: 0.5 + 'rem' }}
-                       value={ this.state.keys }
+                       value={ state.keys }
                        onChange={ this.keys.bind(this) }
                 />
 
@@ -107,15 +113,16 @@ export class Root extends Component {
                 <input style={{ background: 'lightgray',
                                 fontSize: 1.5 + 'rem',
                                 marginTop: 0.5 + 'rem' }}
-                       value={ this.state.keys }
+                       value={ state.keys }
                        onChange={ this.keys.bind(this) }
                 />
 
                 {/* do we want to set value here? */}
                 <textarea className="br pa2 pre"
                           style={{ flexBasis: '50%', resize: 'none' }}
-                          value={ this.state.text }
-                          onChange={this.text.bind(this)}>
+                          value={ state.text }
+                          onChange={ this.text.bind(this) }
+                >
                 </textarea>
 
                 <button className="mt3 fr f4"
