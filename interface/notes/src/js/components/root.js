@@ -22,6 +22,18 @@ export class Root extends Component {
       { action: 'search', keys: this.state.keys });
   }
 
+  text() {
+    console.log('Root text()', event.target.value);
+    this.setState({ text: event.target.value });
+  }
+
+  add() {
+    // console.log('Root add()', this.state);
+    api.action('notes', 'json',
+      { action: 'add', keys: this.state.keys, text: this.state.text });
+    // need a redirect to /~notes/edit (do in store.js?) XX
+  }
+
   // should be a Component? FIXME
   matches() {
     // console.log('Root matches()', this.state);
@@ -39,7 +51,8 @@ export class Root extends Component {
       });
       // console.log('notes', notes);
 
-      return '<div>' + notes.join('\n') + '</div>'
+      // add Edit button XX
+      return '<div>' + notes.join('<br>') + '</div>';
     });
 
     return matches.join('<br>');
@@ -77,6 +90,39 @@ export class Root extends Component {
 
                 <div dangerouslySetInnerHTML={{ __html: this.matches() }}>
                 </div>
+
+              </div>
+            )}}
+          />
+
+          <Route exact path="/~notes/add" render={ () => {
+            return (
+              <div className="cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden">
+
+                <p style={{ fontSize: 1.0 + 'rem', color: 'lightgray' }}>
+                  Add a note
+                </p>
+
+                {/* do we want to set value here? */}
+                <input style={{ background: 'lightgray',
+                                fontSize: 1.5 + 'rem',
+                                marginTop: 0.5 + 'rem' }}
+                       value={ this.state.keys }
+                       onChange={ this.keys.bind(this) }
+                />
+
+                {/* do we want to set value here? */}
+                <textarea className="br pa2 pre"
+                          style={{ flexBasis: '50%', resize: 'none' }}
+                          value={ this.state.text }
+                          onChange={this.text.bind(this)}>
+                </textarea>
+
+                <button className="mt3 fr f4"
+                        style={{ color: 'lightgray', cursor: 'pointer' }}
+                        onClick={ this.add.bind(this) }>
+                  Add
+                </button>
 
               </div>
             )}}

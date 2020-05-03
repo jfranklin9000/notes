@@ -143,6 +143,18 @@
         %json
       =/  put  ((om:dejs:format same) !<(json vase))
       =/  act  (so:dejs:format (~(got by put) %action))
+      ::
+      ?:  =(act 'add')
+        =/  =note  :-
+          %-  keys-from-cord
+            (so:dejs:format (~(got by put) %keys))
+          %-  trip
+            (so:dejs:format (~(got by put) %text))
+        =.  all-notes  (snoc all-notes note)
+        =.  all-keys  %+  weld  all-keys
+          (get-keys-no-match keys.note all-keys)
+        `this  ::  FIXME?
+      ::
       ?:  =(act 'search')
         =/  keywords=cord
           (so:dejs:format (~(got by put) %keys))
@@ -154,6 +166,7 @@
           ==
         :_  this
         [%give %fact ~[/primary] %json !>(json)]~
+      ::
       ~&  >>  [%notes-unknown-action act]
       `this
     ::
