@@ -30,7 +30,7 @@ export class Root extends Component {
   add() {
     // console.log('Root add()', this.state);
     api.action('notes', 'json',
-      { action: 'add', keys: this.state.keys, text: this.state.text });
+      { action: 'add', id: 0, keys: this.state.keys, text: this.state.text });
 
     // need a redirect to /~notes/edit (/~notes for now)
     // could not get this to work XX
@@ -67,6 +67,8 @@ export class Root extends Component {
     const { props, state } = this; // move up?
 
     console.log('Root render()', state, props);
+
+    // need a New Note button on main page XX
 
     return (
       <BrowserRouter>

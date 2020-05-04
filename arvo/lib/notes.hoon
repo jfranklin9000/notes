@@ -250,16 +250,42 @@
   =/  saved  !<(state-versions vase)
   =?  saved  ?=(%0 -.saved)
     (state-0-to-1 s.saved)
-  ?>  ?=(%1 -.saved)
+  =?  saved  ?=(%1 -.saved)
+    (state-1-to-2 s.saved)
+  ?>  ?=(%2 -.saved)
   ::  manually build product of a specific
   ::  state definition, not the union one
-  [%1 s=s.saved]
+  [%2 s=s.saved]
+::
+++  get-keys-all-0
+  ::  probably a library function for this FIXME
+  |=  n=notes-0
+  ^-  keys
+  =|  z=keys
+  |-
+    ?~  n  z
+  $(n t.n, z (weld z (get-keys-no-match keys.i.n z)))
 ::
 ++  state-0-to-1
   ~&  %state-0-to-1
   |=  =state-0
   =|  =state-1
   =.  all-notes.state-1  all-notes.state-0
-  =.  all-keys.state-1   (get-keys-all all-notes.state-0)
+  =.  all-keys.state-1   (get-keys-all-0 all-notes.state-0)
   [%1 s=state-1]
+::
+++  state-1-to-2
+  ~&  %state-1-to-2
+  |=  =state-1
+  =|  =state-2
+  =/  with-id=[notes-2 @ud]
+    %^  spin  all-notes.state-1  0
+    |=  [=note-1 id=@ud]
+    ^-  [note-2 @ud]
+    =.  id  +(id)
+    :_  id  [id keys.note-1 text.note-1]
+  =.  note-id.state-2    +.with-id
+  =.  all-notes.state-2  -.with-id
+  =.  all-keys.state-2   all-keys.state-1
+  [%2 s=state-2]
 --

@@ -105,13 +105,15 @@
       nc    ~(. +> bowl)  ::  notes core
       def   ~(. (default-agent this %|) bowl)
       ::
+      note-id    note-id.s.state
       all-notes  all-notes.s.state
       all-keys   all-keys.s.state
   ::
   ++  on-init
     ~&  >  %notes-on-init
     ^-  (quip card _this)
-    =/  launcha  [%launch-action !>([%add %notes / '/~notes/js/tile.js'])]
+    =/  launcha
+      [%launch-action !>([%add %notes / '/~notes/js/tile.js'])]
     :_  this
     :~  [%pass / %arvo %e %connect [~ /'~notes'] %notes]
         [%pass /notes %agent [our.bowl %launch] %poke launcha]
@@ -145,7 +147,9 @@
       =/  act  (so:dejs:format (~(got by put) %action))
       ::
       ?:  =(act 'add')
-        =/  =note  :-
+        =.  note-id  +(note-id)
+        =/  =note  :+
+          note-id
           %-  keys-from-cord
             (so:dejs:format (~(got by put) %keys))
           %-  trip
@@ -171,11 +175,12 @@
       `this
     ::
         %noun
-      ~&  vase
       =+  !<(com=command vase)
       ?-    -.com
       ::
           %add
+        =.  note-id  +(note-id)
+        =.  id.note.com  note-id  ::  overwrite
         =.  all-notes  (snoc all-notes note.com)
         =.  all-keys  %+  weld  all-keys
           (get-keys-no-match keys.note.com all-keys)

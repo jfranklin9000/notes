@@ -49203,7 +49203,7 @@
                 return (
                   react.createElement('img', {
                     className: "invert-d " + classes,
-                    src: "/~udonedit/img/Home.png",
+                    src: "/~notes/img/Home.png",
                     width: 16,
                     height: 16, __self: this, __source: {fileName: _jsxFileName, lineNumber: 7}}
                   )
@@ -53324,29 +53324,141 @@
               }
             }
 
-            const _jsxFileName$3 = "/Volumes/sensitive/URBIT/notes/interface/notes/src/js/components/root.js";// import _ from 'lodash';
-
+            const _jsxFileName$3 = "/Volumes/sensitive/URBIT/notes/interface/notes/src/js/components/root.js";
             class Root extends react_1 {
+
               constructor(props) {
+                // console.log('Root constructor()', props);
                 super(props);
+                this.state = store.state;
+                store.setStateHandler(this.setState.bind(this));
+              }
+
+              keys(event) {
+                // console.log('Root keys()', event.target.value);
+                this.setState({ keys: event.target.value });
+              }
+
+              search() {
+                // console.log('Root search()', this.state);
+                api.action('notes', 'json',
+                  { action: 'search', keys: this.state.keys });
+              }
+
+              text() {
+                // console.log('Root text()', event.target.value);
+                this.setState({ text: event.target.value });
+              }
+
+              add() {
+                // console.log('Root add()', this.state);
+                api.action('notes', 'json',
+                  { action: 'add', id: 0, keys: this.state.keys, text: this.state.text });
+
+                // need a redirect to /~notes/edit (/~notes for now)
+                // could not get this to work XX
+                // return <Redirect to='/~notes' />;
+                // yeesh, probably not right, but it works
+                window.location.replace("/~notes");
+              }
+
+              // should be a Component? FIXME
+              matches() {
+                // console.log('Root matches()', this.state);
+                if (this.state.search === null)
+                  return '<p><i>no matches</i></p>';
+
+                let matches = this.state.search.map(function(match) {
+                  // console.log('match', match);
+
+                  // let keys = '<span>' + match.keys.join(' ') + '</span>';
+                  // console.log('keys', keys);
+
+                  let notes = match.notes.map(function(note) {
+                    return '<p>' + note.text + '</p>';
+                  });
+                  // console.log('notes', notes);
+
+                  // add Edit button XX
+                  return '<div>' + notes.join('<br>') + '</div>';
+                });
+
+                return matches.join('<br>');
               }
 
               render() {
+                const { props, state } = this; // move up?
+
+                console.log('Root render()', state, props);
+
+                // need a New Note button on main page XX
 
                 return (
-                  react.createElement(BrowserRouter, {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 14}}
-                    , react.createElement('div', { className: "absolute h-100 w-100 bg-gray0-d ph4-m ph4-l ph4-xl pb4-m pb4-l pb4-xl"         , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 15}}
-                    , react.createElement(HeaderBar, {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 16}})
-                    , react.createElement(Route, { exact: true, path: "/~notes", render:  () => {
-                      return (
-                        react.createElement('div', { className: "cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden"                 , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 19}}
-                          , react.createElement('h1', { className: "mt0 f8 fw4"  , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 20}}, "Notes")
-                          , react.createElement('p', { className: "lh-copy measure pt3"  , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 21}}, "Welcome to your Landscape application."    )
-                          , react.createElement('p', { className: "lh-copy measure pt3"  , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 22}}, "To get started, edit "    , react.createElement('code', {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 22}}, "src/index.js"), ", " , react.createElement('code', {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 22}}, "tile/tile.js"), " or "  , react.createElement('code', {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 22}}, "arvo/app/udonedit.hoon"), " and "  , react.createElement('code', {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 22}}, "|commit %home" ), " on your Urbit ship to see your changes."        )
-                          , react.createElement('a', { className: "black no-underline db f8 pt3"    , href: "https://urbit.org/docs", __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 23}}, "-> Read the docs"   )
-                        )
-                      )}, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 17}}
-                    )
+                  react.createElement(BrowserRouter, {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 74}}
+                    , react.createElement('div', { className: "absolute h-100 w-100 bg-gray0-d ph4-m ph4-l ph4-xl pb4-m pb4-l pb4-xl"         , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 75}}
+                      , react.createElement(HeaderBar, {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 76}})
+                      , react.createElement(Route, { exact: true, path: "/~notes", render:  () => {
+                        return (
+                          react.createElement('div', { className: "cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden"                 , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 79}}
+
+                            , react.createElement('p', { style: { fontSize: 1.0 + 'rem', color: 'lightgray' }, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 81}}, "Search notes with keywords"
+
+                            )
+
+                            /* do we want to set value here? */
+                            , react.createElement('input', { style: { background: 'lightgray',
+                                            fontSize: 1.5 + 'rem',
+                                            marginTop: 0.5 + 'rem' },
+                                   value:  state.keys ,
+                                   onChange:  this.keys.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 86}}
+                            )
+
+                            , react.createElement('button', { className: "mt3 fr f4"  ,
+                                    style: { color: 'lightgray', cursor: 'pointer' },
+                                    onClick:  this.search.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 93}}, "Search"
+
+                            )
+
+                            , react.createElement('div', { dangerouslySetInnerHTML: { __html: this.matches() }, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 99}}
+                            )
+
+                          )
+                        )}, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 77}}
+                      )
+
+                      , react.createElement(Route, { exact: true, path: "/~notes/add", render:  () => {
+                        return (
+                          react.createElement('div', { className: "cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden"                 , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 108}}
+
+                            , react.createElement('p', { style: { fontSize: 1.0 + 'rem', color: 'lightgray' }, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 110}}, "Add a note"
+
+                            )
+
+                            /* do we want to set value here? */
+                            , react.createElement('input', { style: { background: 'lightgray',
+                                            fontSize: 1.5 + 'rem',
+                                            marginTop: 0.5 + 'rem' },
+                                   value:  state.keys ,
+                                   onChange:  this.keys.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 115}}
+                            )
+
+                            /* do we want to set value here? */
+                            , react.createElement('textarea', { className: "br pa2 pre"  ,
+                                      style: { flexBasis: '50%', resize: 'none' },
+                                      value:  state.text ,
+                                      onChange:  this.text.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 123}}
+                            
+                            )
+
+                            , react.createElement('button', { className: "mt3 fr f4"  ,
+                                    style: { color: 'lightgray', cursor: 'pointer' },
+                                    onClick:  this.add.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 130}}, "Add"
+
+                            )
+
+                          )
+                        )}, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 106}}
+                      )
                     )
                   )
                 )
@@ -53396,21 +53508,20 @@
                 });
               }
             }
-            let api = new UrbitApi();
-            window.api = api;
+            let api$1 = new UrbitApi();
+            window.api = api$1;
 
             // import { InitialReducer } from '/reducers/initial';
             // import { ConfigReducer } from '/reducers/config';
             // import { UpdateReducer } from '/reducers/update';
 
-
             class Store {
                 constructor() {
-                    // console.log('src/js/store.js constructor()');
+                    // console.log('Store constructor()');
                     this.state = {
-                        source: '',    // udon
-                        object: '',    // html
-                        edited: false  // source and object are consistent
+                        keys: '',
+                        text: '',
+                        search: null
                     };
 
                     // this.initialReducer = new InitialReducer();
@@ -53420,50 +53531,51 @@
                 }
 
                 setStateHandler(setState) {
-                    // console.log('src/js/store.js setStateHandler()', setState);
+                    // console.log('Store setStateHandler()', setState);
                     this.setState = setState;
                 }
 
                 handleEvent(data) {
-                    // console.log('src/js/store.js handleEvent()', data);
+                    console.log('Store handleEvent()', data);
                     let json = data.data;
+                    console.log(json);
 
                     // this.initialReducer.reduce(json, this.state);
                     // this.configReducer.reduce(json, this.state);
                     // this.updateReducer.reduce(json, this.state);
-                    this.state.source = json.state.source;
-                    this.state.object = json.state.object;
-                    this.state.edited = false;
+                    if (json.keys !== undefined)
+                        this.state.keys = json.keys;
+                    if (json.search !== undefined)
+                        this.state.search = json.search;
                     this.setState(this.state);
                 }
             }
 
-            let store = new Store();
-            window.store = store;
-
-            // import urbitOb from 'urbit-ob';
-
+            let store$1 = new Store();
+            window.store = store$1;
 
             class Subscription {
               start() {
-                if (api.authTokens) ; else {
+                if (api$1.authTokens) {
+                  this.initializeNotes();
+                } else {
                   console.error("~~~ ERROR: Must set api.authTokens before operation ~~~");
                 }
               }
 
-              // initializeNotes() {
-              //   api.bind('/primary', 'PUT', api.authTokens.ship, 'notes',
-              //     this.handleEvent.bind(this),
-              //     this.handleError.bind(this));
-              // }
+              initializeNotes() {
+                api$1.bind('/primary', 'PUT', api$1.authTokens.ship, 'notes',
+                  this.handleEvent.bind(this),
+                  this.handleError.bind(this));
+              }
 
               handleEvent(diff) {
-                store.handleEvent(diff);
+                store$1.handleEvent(diff);
               }
 
               handleError(err) {
                 console.error(err);
-                api.bind('/primary', 'PUT', api.authTokens.ship, 'notes',
+                api$1.bind('/primary', 'PUT', api$1.authTokens.ship, 'notes',
                   this.handleEvent.bind(this),
                   this.handleError.bind(this));
               }
@@ -53472,9 +53584,9 @@
             let subscription = new Subscription();
 
             const _jsxFileName$4 = "/Volumes/sensitive/URBIT/notes/interface/notes/src/index.js";
-            console.log("hello from notes");
+            console.log('hello from notes');
 
-            api.setAuthTokens({
+            api$1.setAuthTokens({
               ship: window.ship
             });
 

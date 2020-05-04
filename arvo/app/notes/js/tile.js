@@ -2160,26 +2160,24 @@
             });
             var react_1 = react.Component;
 
-            const _jsxFileName = "/Volumes/sensitive/URBIT/notes/interface/notes/tile/tile.js";// import classnames from 'classnames';
-            // import _ from 'lodash';
-
+            const _jsxFileName = "/Volumes/sensitive/URBIT/notes/interface/notes/tile/tile.js";
             class notesTile extends react_1 {
 
-              // constructor(props) {
-              //   super(props);
-              //   // console.log('notesTile.constructor()', props);
-              // }
+              constructor(props) {
+                // console.log('notesTile constructor()', props);
+                super(props);
+              }
 
               render() {
                 return (
                   react.createElement('div', { className: "w-100 h-100 relative bg-white bg-gray0-d " +
-                  "ba b--black b--gray1-d", __self: this, __source: {fileName: _jsxFileName, lineNumber: 14}}
-                    , react.createElement('a', { className: "w-100 h-100 db no-underline"   , href: "/~notes", __self: this, __source: {fileName: _jsxFileName, lineNumber: 16}}
-                      , react.createElement('p', { className: "black white-d f9 absolute"   , style: { left: 8, top: 8 }, __self: this, __source: {fileName: _jsxFileName, lineNumber: 17}}, "Notes"
+                  "ba b--black b--gray1-d", __self: this, __source: {fileName: _jsxFileName, lineNumber: 12}}
+                    , react.createElement('a', { className: "w-100 h-100 db no-underline"   , href: "/~notes", __self: this, __source: {fileName: _jsxFileName, lineNumber: 14}}
+                      , react.createElement('p', { className: "black white-d f9 absolute"   , style: { left: 8, top: 8 }, __self: this, __source: {fileName: _jsxFileName, lineNumber: 15}}, "Notes"
 
                       )
                       , react.createElement('p', { className: "relative w-100 flex-col f9"   ,
-                      style: { top: 50, textAlign: 'center' }, __self: this, __source: {fileName: _jsxFileName, lineNumber: 20}}, "Create notes and search by keywords"
+                      style: { top: 50, textAlign: 'center' }, __self: this, __source: {fileName: _jsxFileName, lineNumber: 18}}, "Create notes and search by keywords"
 
                       )
                     )
