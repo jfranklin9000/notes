@@ -4,92 +4,50 @@
 =,  notes
 ::
 |%
+::
+::  +key-match: is key in keys?
+::
 ++  key-match
-  ::  is a in b?
-  ::  a=%a  b=~[%a %b %c]  %.y
-  ::  a=%z  b=~[%a %b %c]  %.n
-  ::  a=%a  b=~            %.n
-  |=  [a=key b=keys]
+  |=  [=key =keys]
   ^-  ?
-  |-  ?~  b       |
-    ?:  =(a i.b)  &
-  $(b t.b)
+  (lien keys |=(k=^key =(k key)))
+::
+::  +key-match-any: are any of a in b?
 ::
 ++  key-match-any
-  ::  are any of a in b?
-  ::  a=~[%a %z]  b=~[%a %b %c]  %.y
-  ::  a=~[%y %z]  b=~[%a %b %c]  %.n
-  ::  a=~[%a %z]  b=~            %.n
-  ::  a=~  b=~[%a %b %c]         %.n
   |=  [a=keys b=keys]
   ^-  ?
-  ::  don't turn a into a lest
-  =/  x  a  ?~  x  |  ?~  b  |
-  |-  ?~  a                |
-    ?:  (key-match i.a b)  &
-  $(a t.a)
+  ?~  a  |
+  (lien `keys`a |=(=key (key-match key b)))
+::
+::  +key-match-all: are all of a in b?
 ::
 ++  key-match-all
-  ::  are all of a in b?
-  ::  a=~[%a %b]  b=~[%a %b %c]  %.y
-  ::  a=~[%a %z]  b=~[%a %b %c]  %.n
-  ::  a=~[%a %b]  b=~            %.n
-  ::  a=~  b=~[%a %b %c]         %.n
   |=  [a=keys b=keys]
   ^-  ?
-  ::  don't turn a into a lest
-  =/  x  a  ?~  x  |  ?~  b  |
-  |-  ?~  a                &
-    ?.  (key-match i.a b)  |
-  $(a t.a)
+  ?~  a  |
+  (levy `keys`a |=(=key (key-match key b)))
+::
+::  +get-keys-no-match: get keys in a that aren't in b
 ::
 ++  get-keys-no-match
-  ::  get keys in a that aren't in b
-  ::  a=~               b=~[%a %b %e %f]  ~
-  ::  a=~[%a %b %c %d]  b=~               ~[%a %b %c %d]
-  ::  a=~[%a %b %c %d]  b=~[%a %b %e %f]  ~[%c %d]
-  ::  a=~[%a %b %c]     b=~[%d %e %f]     ~[%a %b %c]
-  ::  a=~[%a %b %c]     b=~[%a %b %c]     ~
   |=  [a=keys b=keys]
   ^-  keys
-  =|  c=keys
-  |-
-    ?~  a  c
-    ?:  (key-match i.a b)
-      $(a t.a)
-  $(a t.a, c (snoc c i.a))
+  =|  =keys
+  (skip a |=(=key (key-match key b)))
+::
+::  +get-keys-all: get all keys from notes (no duplicates)
 ::
 ++  get-keys-all
-  ::  get all keys from n
-  ::  n=~  z=~
-  ::  n=:~
-  ::    [~[%a %b %c] "abc"]
-  ::    [~[%b %c %d] "bcd"]
-  ::    [~[%c %d %e] "cde"]
-  ::    [~[%a %b %z] "abz"]
-  ::    ==
-  ::  z=~[%a %b %c %d %e %z]
-  |=  n=notes
+  |=  =notes
   ^-  keys
-  =|  z=keys
-  |-
-    ?~  n  z
-  $(n t.n, z (weld z (get-keys-no-match keys.i.n z)))
+  %+  roll  notes
+  =|  [=note =keys]
+  |.  (weld keys (get-keys-no-match keys.note keys))
 ::
-++  get-notes-any
-  ::  get notes matching any key
-  ::  z=~[%a %b]
-  ::  n=:~
-  ::    [~[%a %b %c] "abc"]
-  ::    [~[%b %c %d] "bcd"]
-  ::    [~[%c %d %e] "cde"]
-  ::    [~[%a %b %z] "abz"]
-  ::    ==
-  ::  m=:~  ::  flopped
-  ::    [~[%a %b %z] "abz"]
-  ::    [~[%b %c %d] "bcd"]
-  ::    [~[%a %b %c] "abc"]
-  ::    ==
+::  +get-notes-any: get notes matching any of keys
+::
+++  get-notes-any  ::  rewrite FIXME
   |=  [z=keys n=notes]
   ^-  notes
   =|  m=notes
@@ -98,19 +56,9 @@
       $(n t.n)
   $(n t.n, m [i=i.n t=m])  ::  flop
 ::
-++  get-notes-all
-  ::  get notes matching all keys
-  ::  z=~[%a %b]
-  ::  n=:~
-  ::    [~[%a %b %c] "abc"]
-  ::    [~[%b %c %d] "bcd"]
-  ::    [~[%c %d %e] "cde"]
-  ::    [~[%a %b %z] "abz"]
-  ::    ==
-  ::  m=:~  ::  flopped
-  ::    [~[%a %b %z] "abz"]
-  ::    [~[%a %b %c] "abc"]
-  ::    ==
+::  +get-notes-all: get notes matching all of keys
+::
+++  get-notes-all  ::  rewrite FIXME
   |=  [z=keys n=notes]
   ^-  notes
   =|  m=notes
@@ -119,7 +67,9 @@
       $(n t.n)
   $(n t.n, m [i=i.n t=m])  ::  flop
 ::
-++  get-notes-all-not-all
+::  +get-notes-all-not-all: FIX ME
+::
+++  get-notes-all-not-all  ::  rewrite FIXME (use skid)
   ::  get cell of:
   ::  - notes matching all keys
   ::  - notes not matching all keys
@@ -140,6 +90,8 @@
     ?:  (key-match-all z keys.i.n)
       $(n t.n, all.a [i=i.n t=all.a])       ::  flop
   $(n t.n, not-all.a (snoc not-all.a i.n))  ::  no flop
+::
+::  +get-key-combos-n:
 ::
 ++  get-key-combos-n
   ::  get combinations of n from z
@@ -187,6 +139,8 @@
     $(i +(i))
   --
 ::
+::  +get-key-combos-all:
+::
 ++  get-key-combos-all
   ::  get combinations of n=(lent z), n-1, ... 1 from z
   ::  z=~            ~
@@ -204,6 +158,8 @@
   |-
     ?:  =(n 0)  c
   $(n (dec n), c (weld c (get-key-combos-n n z)))
+::
+::  +search-notes
 ::
 ++  search-notes
   ::  get all notes from n that match any of z,
@@ -258,13 +214,11 @@
   [%2 s=s.saved]
 ::
 ++  get-keys-all-0
-  ::  probably a library function for this FIXME
-  |=  n=notes-0
+  |=  =notes-0
   ^-  keys
-  =|  z=keys
-  |-
-    ?~  n  z
-  $(n t.n, z (weld z (get-keys-no-match keys.i.n z)))
+  %+  roll  notes-0
+  =|  [=note-0 =keys]
+  |.  (weld keys (get-keys-no-match keys.note-0 keys))
 ::
 ++  state-0-to-1
   ~&  %state-0-to-1
@@ -288,4 +242,5 @@
   =.  all-notes.state-2  -.with-id
   =.  all-keys.state-2   all-keys.state-1
   [%2 s=state-2]
+::
 --

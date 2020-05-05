@@ -7,15 +7,40 @@
 =,  notes
 ::
 |%
+::  k-eys
+++  k-a     ~[%a]
+++  k-b     ~[%b]
+++  k-c     ~[%c]
+++  k-d     ~[%d]
+++  k-ab    ~[%a %b]
+++  k-ac    ~[%a %c]
+++  k-az    ~[%a %z]
+++  k-bc    ~[%b %c]
+++  k-yz    ~[%y %z]
+++  k-abc   ~[%a %b %c]
+++  k-abz   ~[%a %b %z]
+++  k-bcd   ~[%b %c %d]
+++  k-cde   ~[%c %d %e]
+++  k-def   ~[%d %e %f]
+++  k-abcd  ~[%a %b %c %d]
+++  k-abef  ~[%a %b %e %f]
+::
 ++  test-key-match
+  ::
+  ::  is key in keys?
+  ::
+  ::  key=%a  keys=~[%a %b %c]  %.y
+  ::  key=%z  keys=~[%a %b %c]  %.n
+  ::  key=%a  keys=~            %.n
+  ::
   ;:  weld
     %+  expect-eq
       !>  %.y
-      !>  (key-match %a ~[%a %b %c])
+      !>  (key-match %a k-abc)
   ::
     %+  expect-eq
       !>  %.n
-      !>  (key-match %z ~[%a %b %c])
+      !>  (key-match %z k-abc)
   ::
     %+  expect-eq
       !>  %.n
@@ -23,74 +48,112 @@
   ==
 ::
 ++  test-key-match-any
+  ::
+  ::  are any of a in b?
+  ::
+  ::  a=~[%a %z]  b=~[%a %b %c]  %.y
+  ::  a=~[%y %z]  b=~[%a %b %c]  %.n
+  ::  a=~[%a %z]  b=~            %.n
+  ::  a=~         b=~[%a %b %c]  %.n
+  ::
   ;:  weld
     %+  expect-eq
       !>  %.y
-      !>  (key-match-any ~[%a %z] ~[%a %b %c])
+      !>  (key-match-any k-az k-abc)
   ::
     %+  expect-eq
       !>  %.n
-      !>  (key-match-any ~[%y %z] ~[%a %b %c])
+      !>  (key-match-any k-yz k-abc)
   ::
     %+  expect-eq
       !>  %.n
-      !>  (key-match-any ~[%a %z] ~)
+      !>  (key-match-any k-az ~)
   ::
     %+  expect-eq
       !>  %.n
-      !>  (key-match-any ~ ~[%a %b %c])
+      !>  (key-match-any ~ k-abc)
   ==
 ::
 ++  test-key-match-all
+  ::
+  ::  are all of a in b?
+  ::
+  ::  a=~[%a %b]  b=~[%a %b %c]  %.y
+  ::  a=~[%a %z]  b=~[%a %b %c]  %.n
+  ::  a=~[%a %b]  b=~            %.n
+  ::  a=~         b=~[%a %b %c]  %.n
+  ::
   ;:  weld
     %+  expect-eq
       !>  %.y
-      !>  (key-match-all ~[%a %b] ~[%a %b %c])
+      !>  (key-match-all k-ab k-abc)
   ::
     %+  expect-eq
       !>  %.n
-      !>  (key-match-all ~[%a %z] ~[%a %b %c])
+      !>  (key-match-all k-az k-abc)
   ::
     %+  expect-eq
       !>  %.n
-      !>  (key-match-all ~[%a %b] ~)
+      !>  (key-match-all k-ab ~)
   ::
     %+  expect-eq
       !>  %.n
-      !>  (key-match-all ~ ~[%a %b %c])
+      !>  (key-match-all ~ k-abc)
   ==
 ::
 ++  test-get-keys-no-match
+  ::
+  ::  get keys in a that aren't in b
+  ::
+  ::  a=~               b=~[%a %b %e %f]  ~
+  ::  a=~[%a %b %c %d]  b=~               ~[%a %b %c %d]
+  ::  a=~[%a %b %c %d]  b=~[%a %b %e %f]  ~[%c %d]
+  ::  a=~[%a %b %c]     b=~[%d %e %f]     ~[%a %b %c]
+  ::  a=~[%a %b %c]     b=~[%a %b %c]     ~
+  ::
   ;:  weld
     %+  expect-eq
       !>  ~
-      !>  (get-keys-no-match ~ ~[%a %b %e %f])
+      !>  (get-keys-no-match ~ k-abef)
   ::
     %+  expect-eq
-      !>  ~[%a %b %c %d]
-      !>  (get-keys-no-match ~[%a %b %c %d] ~)
+      !>  k-abcd
+      !>  (get-keys-no-match k-abcd ~)
   ::
     %+  expect-eq
       !>  ~[%c %d]
-      !>  (get-keys-no-match ~[%a %b %c %d] ~[%a %b %e %f])
+      !>  (get-keys-no-match k-abcd k-abef)
   ::
     %+  expect-eq
-      !>  ~[%a %b %c]
-      !>  (get-keys-no-match ~[%a %b %c] ~[%d %e %f])
+      !>  k-abc
+      !>  (get-keys-no-match k-abc k-def)
   ::
     %+  expect-eq
       !>  ~
-      !>  (get-keys-no-match ~[%a %b %c] ~[%a %b %c])
+      !>  (get-keys-no-match k-abc k-abc)
   ==
 ::
-++  abc  [~[%a %b %c] "abc"]
-++  bcd  [~[%b %c %d] "bcd"]
-++  cde  [~[%c %d %e] "cde"]
-++  abz  [~[%a %b %z] "abz"]
+++  abc  [1 k-abc "abc"]
+++  bcd  [3 k-bcd "bcd"]
+++  cde  [5 k-cde "cde"]
+++  abz  [7 k-abz "abz"]
 ::
 ++  some-notes  ~[abc bcd cde abz]
 ::
 ++  test-get-keys-all
+  ::
+  ::  get all keys from notes (no duplicates)
+  ::
+  ::  notes=~                ~
+  ::  notes=
+  ::    :~
+  ::    [~[%a %b %c] "abc"]
+  ::    [~[%b %c %d] "bcd"]
+  ::    [~[%c %d %e] "cde"]
+  ::    [~[%a %b %z] "abz"]
+  ::    ==
+  ::                         ~[%a %b %c %d %e %z]
+  ::
   ;:  weld
     %+  expect-eq
       !>  ~
@@ -102,17 +165,48 @@
   ==
 ::
 ++  test-get-notes-any
+  ::
+  ::  get notes matching any key
+  ::
+  ::  z=~[%a %b]
+  ::  n=:~
+  ::    [~[%a %b %c] "abc"]
+  ::    [~[%b %c %d] "bcd"]
+  ::    [~[%c %d %e] "cde"]
+  ::    [~[%a %b %z] "abz"]
+  ::    ==
+  ::  m=:~  ::  flopped
+  ::    [~[%a %b %z] "abz"]
+  ::    [~[%b %c %d] "bcd"]
+  ::    [~[%a %b %c] "abc"]
+  ::    ==
+  ::
   ;:  weld
     %+  expect-eq
       !>  ~[abz bcd abc]  ::  flopped
-      !>  (get-notes-any ~[%a %b] some-notes)
+      !>  (get-notes-any k-ab some-notes)
   ==
 ::
 ++  test-get-notes-all
+  ::
+  ::  get notes matching all keys
+  ::
+  ::  z=~[%a %b]
+  ::  n=:~
+  ::    [~[%a %b %c] "abc"]
+  ::    [~[%b %c %d] "bcd"]
+  ::    [~[%c %d %e] "cde"]
+  ::    [~[%a %b %z] "abz"]
+  ::    ==
+  ::  m=:~  ::  flopped
+  ::    [~[%a %b %z] "abz"]
+  ::    [~[%a %b %c] "abc"]
+  ::    ==
+  ::
   ;:  weld
     %+  expect-eq
       !>  ~[abz abc]  ::  flopped
-      !>  (get-notes-all ~[%a %b] some-notes)
+      !>  (get-notes-all k-ab some-notes)
   ==
 ::
 ++  test-get-notes-all-not-all
@@ -120,7 +214,7 @@
     %+  expect-eq
       !>  ::  all flopped, not-all not flopped
           [~[abz abc] ~[bcd cde]]  ::  [all not-all]
-      !>  (get-notes-all-not-all ~[%a %b] some-notes)
+      !>  (get-notes-all-not-all k-ab some-notes)
   ==
 ::
 ++  test-get-key-combos-n
@@ -131,23 +225,23 @@
   ::
     %+  expect-eq
       !>  ~
-      !>  (get-key-combos-n 0 ~[%a %b %c])
+      !>  (get-key-combos-n 0 k-abc)
   ::
     %+  expect-eq
-      !>  ~[~[%a] ~[%b] ~[%c]]
-      !>  (get-key-combos-n 1 ~[%a %b %c])
+      !>  ~[k-a k-b k-c]
+      !>  (get-key-combos-n 1 k-abc)
   ::
     %+  expect-eq
-      !>  ~[~[%a %b] ~[%a %c] ~[%b %c]]
-      !>  (get-key-combos-n 2 ~[%a %b %c])
+      !>  ~[k-ab k-ac k-bc]
+      !>  (get-key-combos-n 2 k-abc)
   ::
     %+  expect-eq
-      !>  ~[~[%a %b %c]]
-      !>  (get-key-combos-n 3 ~[%a %b %c])
+      !>  ~[k-abc]
+      !>  (get-key-combos-n 3 k-abc)
   ::
     %+  expect-eq
       !>  ~
-      !>  (get-key-combos-n 4 ~[%a %b %c])
+      !>  (get-key-combos-n 4 k-abc)
   ==
 ::
 ++  test-get-key-combos-all
@@ -157,53 +251,53 @@
       !>  (get-key-combos-all ~)
   ::
     %+  expect-eq
-      !>  ~[~[%a]]
-      !>  (get-key-combos-all ~[%a])
+      !>  ~[k-a]
+      !>  (get-key-combos-all k-a)
   ::
     %+  expect-eq
-      !>  ~[~[%a %b] ~[%a] ~[%b]]
-      !>  (get-key-combos-all ~[%a %b])
+      !>  ~[k-ab k-a k-b]
+      !>  (get-key-combos-all k-ab)
   ::
     %+  expect-eq
       !>  :~
-          ~[%a %b %c]
-          ~[%a %b]  ~[%a %c]  ~[%b %c]
-          ~[%a]  ~[%b]  ~[%c]
+          k-abc
+          k-ab  k-ac  k-bc
+          k-a  k-b  k-c
           ==
-      !>  (get-key-combos-all ~[%a %b %c])
+      !>  (get-key-combos-all k-abc)
   ==
 ::
-++  amn  [~[%a %m %n] "amn"]
-++  auv  [~[%a %u %v] "auv"]
-++  axy  [~[%a %x %y] "axy"]
-++  bmn  [~[%b %m %n] "bmn"]
-++  buv  [~[%b %u %v] "buv"]
-++  bxy  [~[%b %x %y] "bxy"]
-++  cmn  [~[%c %m %n] "cmn"]
-++  cuv  [~[%c %u %v] "cuv"]
-++  cxy  [~[%c %x %y] "cxy"]
-++  dmn  [~[%d %m %n] "dmn"]
-++  duv  [~[%d %u %v] "duv"]
-++  dxy  [~[%d %x %y] "dxy"]
+++  amn  [10 ~[%a %m %n] "amn"]
+++  auv  [11 ~[%a %u %v] "auv"]
+++  axy  [12 ~[%a %x %y] "axy"]
+++  bmn  [13 ~[%b %m %n] "bmn"]
+++  buv  [14 ~[%b %u %v] "buv"]
+++  bxy  [15 ~[%b %x %y] "bxy"]
+++  cmn  [16 ~[%c %m %n] "cmn"]
+++  cuv  [17 ~[%c %u %v] "cuv"]
+++  cxy  [18 ~[%c %x %y] "cxy"]
+++  dmn  [19 ~[%d %m %n] "dmn"]
+++  duv  [20 ~[%d %u %v] "duv"]
+++  dxy  [21 ~[%d %x %y] "dxy"]
 ::
 ++  flop-check-notes
   ~[amn auv axy bmn buv bxy cmn cuv cxy dmn duv dxy]
 ::
 ++  flop-check-search
-  :~  [~[%a] ~[amn auv axy]]
-      [~[%b] ~[bmn buv bxy]]
-      [~[%c] ~[cmn cuv cxy]]
-      [~[%d] ~[dmn duv dxy]]
+  :~  [k-a ~[amn auv axy]]
+      [k-b ~[bmn buv bxy]]
+      [k-c ~[cmn cuv cxy]]
+      [k-d ~[dmn duv dxy]]
   ==
 ::
 ++  test-search-notes
   ;:  weld
     %+  expect-eq
-      !>  ~[[~[%a %b] ~[abc abz]] [~[%b] ~[bcd]]]
-      !>  (search-notes ~[%a %b] some-notes)
+      !>  ~[[k-ab ~[abc abz]] [k-b ~[bcd]]]
+      !>  (search-notes k-ab some-notes)
   ::
     %+  expect-eq
       !>  flop-check-search
-      !>  (search-notes ~[%a %b %c %d] flop-check-notes)
+      !>  (search-notes k-abcd flop-check-notes)
   ==
 --

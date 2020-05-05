@@ -102,7 +102,7 @@
 =<
   |_  =bowl:gall
   +*  this  .
-      nc    ~(. +> bowl)  ::  notes core
+      nc    ~(. +> bowl)
       def   ~(. (default-agent this %|) bowl)
       ::
       note-id    note-id.s.state
