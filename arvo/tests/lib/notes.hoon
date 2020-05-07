@@ -168,22 +168,23 @@
   ::
   ::  get notes matching any key
   ::
-  ::  z=~[%a %b]
-  ::  n=:~
+  ::  keys=~[%a %b]
+  ::  notes=
+  ::    :~
   ::    [~[%a %b %c] "abc"]
   ::    [~[%b %c %d] "bcd"]
   ::    [~[%c %d %e] "cde"]
   ::    [~[%a %b %z] "abz"]
   ::    ==
-  ::  m=:~  ::  flopped
-  ::    [~[%a %b %z] "abz"]
-  ::    [~[%b %c %d] "bcd"]
-  ::    [~[%a %b %c] "abc"]
-  ::    ==
+  ::                         :~
+  ::                         [~[%a %b %c] "abc"]
+  ::                         [~[%b %c %d] "bcd"]
+  ::                         [~[%a %b %z] "abz"]
+  ::                         ==
   ::
   ;:  weld
     %+  expect-eq
-      !>  ~[abz bcd abc]  ::  flopped
+      !>  ~[abc bcd abz]
       !>  (get-notes-any k-ab some-notes)
   ==
 ::
@@ -191,29 +192,52 @@
   ::
   ::  get notes matching all keys
   ::
-  ::  z=~[%a %b]
-  ::  n=:~
+  ::  keys=~[%a %b]
+  ::  notes=
+  ::    :~
   ::    [~[%a %b %c] "abc"]
   ::    [~[%b %c %d] "bcd"]
   ::    [~[%c %d %e] "cde"]
   ::    [~[%a %b %z] "abz"]
   ::    ==
-  ::  m=:~  ::  flopped
-  ::    [~[%a %b %z] "abz"]
-  ::    [~[%a %b %c] "abc"]
-  ::    ==
+  ::                         :~
+  ::                         [~[%a %b %c] "abc"]
+  ::                         [~[%a %b %z] "abz"]
+  ::                         ==
   ::
   ;:  weld
     %+  expect-eq
-      !>  ~[abz abc]  ::  flopped
+      !>  ~[abc abz]
       !>  (get-notes-all k-ab some-notes)
   ==
 ::
 ++  test-get-notes-all-not-all
+  ::
+  ::  get cell of:
+  ::    - notes matching all keys
+  ::    - notes not matching all keys
+  ::
+  ::  keys=~[%a %b]
+  ::  notes=
+  ::    :~
+  ::    [~[%a %b %c] "abc"]
+  ::    [~[%b %c %d] "bcd"]
+  ::    [~[%c %d %e] "cde"]
+  ::    [~[%a %b %z] "abz"]
+  ::    ==
+  ::                         :-
+  ::                         :~
+  ::                         [~[%a %b %c] "abc"]
+  ::                         [~[%a %b %z] "abz"]
+  ::                         ==
+  ::                         :~
+  ::                         [~[%b %c %d] "bcd"]
+  ::                         [~[%c %d %e] "cde"]]
+  ::                         ==
+  ::
   ;:  weld
     %+  expect-eq
-      !>  ::  all flopped, not-all not flopped
-          [~[abz abc] ~[bcd cde]]  ::  [all not-all]
+      !>  [~[abc abz] ~[bcd cde]]
       !>  (get-notes-all-not-all k-ab some-notes)
   ==
 ::
@@ -283,7 +307,7 @@
 ++  flop-check-notes
   ~[amn auv axy bmn buv bxy cmn cuv cxy dmn duv dxy]
 ::
-++  flop-check-search
+++  flop-check-matches
   :~  [k-a ~[amn auv axy]]
       [k-b ~[bmn buv bxy]]
       [k-c ~[cmn cuv cxy]]
@@ -291,13 +315,39 @@
   ==
 ::
 ++  test-search-notes
+  ::
+  ::  get notes from notes that match any key from keys,
+  ::  more matches from keys appear earlier in matches,
+  ::  if a note matches ~[%a %b] it won't then match
+  ::  ~[%a] or ~[%b], don't add [combo ~] to matches
+  ::
+  ::  keys=~[%a %b]
+  ::  notes=
+  ::    :~
+  ::    [~[%a %b %c] "abc"]
+  ::    [~[%b %c %d] "bcd"]
+  ::    [~[%c %d %e] "cde"]
+  ::    [~[%a %b %z] "abz"]
+  ::    ==
+  ::                         :~
+  ::                         :-  ~[%a %b]
+  ::                             :~
+  ::                             [~[%a %b %c] "abc"]
+  ::                             [~[%a %b %z] "abz"]
+  ::                             ==
+  ::                         :-  ~[%b]
+  ::                             :~
+  ::                             [~[%b %c %d] "bcd"]
+  ::                             ==
+  ::                         ==
+  ::
   ;:  weld
     %+  expect-eq
       !>  ~[[k-ab ~[abc abz]] [k-b ~[bcd]]]
       !>  (search-notes k-ab some-notes)
   ::
     %+  expect-eq
-      !>  flop-check-search
+      !>  flop-check-matches
       !>  (search-notes k-abcd flop-check-notes)
   ==
 --

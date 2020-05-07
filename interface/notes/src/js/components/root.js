@@ -42,10 +42,10 @@ export class Root extends Component {
   // should be a Component? FIXME
   matches() {
     // console.log('Root matches()', this.state);
-    if (this.state.search === null)
+    if (this.state.matches === null)
       return '<p><i>no matches</i></p>';
 
-    let matches = this.state.search.map(function(match) {
+    let matches = this.state.matches.map(function(match) {
       // console.log('match', match);
 
       // let keys = '<span>' + match.keys.join(' ') + '</span>';

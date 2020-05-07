@@ -1,20 +1,24 @@
 ::  ~dirwex-dosrev
 ::
 |%
-+$  key     term
-+$  keys    (list key)
-+$  combos  (list keys)
-+$  note    [id=@ud =keys text=tape]
-+$  notes   (list note)
-+$  match   [=keys =notes]  ::  all keys matched all notes
-+$  search  (list match)
++$  key      term
++$  keys     (list key)
 ::
-+$  all-not-all  [all=notes not-all=notes]  ::  internal
++$  note     [id=@ud =keys text=tape]
++$  notes    (list note)
+::
++$  combo    keys
++$  combos   (list combo)
+::
+::  $match: all keys are in all notes
+::
++$  match    [=keys =notes]
++$  matches  (list match)
 ::
 +$  command
   $%  [%add =note]
       [%search =keys]
-      [%dump ~]
+      [%dump ~]             ::  just %dump? (add %help)
   ==
 ::
 ::  previous types (only use in +prepare-state)
@@ -43,7 +47,7 @@
   $:  ::  when a new note is added note-id is incremented
       ::  and used for the note id; the note id cannot be
       ::  used for +snag because of note deletions (and
-      ::  note re-ordering, if that becomes a thing)
+      ::  note re-ordering, if that ever exists)
       note-id=@ud
       all-notes=notes
       all-keys=keys

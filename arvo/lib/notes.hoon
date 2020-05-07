@@ -45,51 +45,30 @@
   =|  [=note =keys]
   |.  (weld keys (get-keys-no-match keys.note keys))
 ::
-::  +get-notes-any: get notes matching any of keys
+::  +get-notes-any: get notes matching any key
 ::
-++  get-notes-any  ::  rewrite FIXME
-  |=  [z=keys n=notes]
-  ^-  notes
-  =|  m=notes
-  |-  ?~  n  m  ::  flopped
-    ?.  (key-match-any z keys.i.n)
-      $(n t.n)
-  $(n t.n, m [i=i.n t=m])  ::  flop
+++  get-notes-any
+  |=  [=keys =notes]
+  ^-  ^notes
+  (skim notes |=(=note (key-match-any keys keys.note)))
 ::
-::  +get-notes-all: get notes matching all of keys
+::  +get-notes-all: get notes matching all keys
 ::
-++  get-notes-all  ::  rewrite FIXME
-  |=  [z=keys n=notes]
-  ^-  notes
-  =|  m=notes
-  |-  ?~  n  m  ::  flopped
-    ?.  (key-match-all z keys.i.n)
-      $(n t.n)
-  $(n t.n, m [i=i.n t=m])  ::  flop
+++  get-notes-all
+  |=  [=keys =notes]
+  ^-  ^notes
+  (skim notes |=(=note (key-match-all keys keys.note)))
 ::
-::  +get-notes-all-not-all: FIX ME
+::  +get-notes-all-not-all:
 ::
-++  get-notes-all-not-all  ::  rewrite FIXME (use skid)
-  ::  get cell of:
-  ::  - notes matching all keys
-  ::  - notes not matching all keys
-  ::  z=~[%a %b]
-  ::  n=:~
-  ::    [~[%a %b %c] "abc"]
-  ::    [~[%b %c %d] "bcd"]
-  ::    [~[%c %d %e] "cde"]
-  ::    [~[%a %b %z] "abz"]
-  ::    ==
-  ::  a=:-  ::  all flopped, not-all not flopped
-  ::    ~[[~[%a %b %z] "abz"] [~[%a %b %c] "abc"]]  ::  all
-  ::    ~[[~[%b %c %d] "bcd"] [~[%c %d %e] "cde"]]  ::  not-all
-  |=  [z=keys n=notes]
-  ^-  all-not-all
-  =|  a=all-not-all
-  |-  ?~  n  a  ::  all flopped, not-all not flopped
-    ?:  (key-match-all z keys.i.n)
-      $(n t.n, all.a [i=i.n t=all.a])       ::  flop
-  $(n t.n, not-all.a (snoc not-all.a i.n))  ::  no flop
+::    get cell of:
+::      - notes matching all keys
+::      - notes not matching all keys
+::
+++  get-notes-all-not-all
+  |=  [=keys =notes]
+  ^-  [^notes ^notes]
+  (skid notes |=(=note (key-match-all keys keys.note)))
 ::
 ::  +get-key-combos-n:
 ::
@@ -159,43 +138,31 @@
     ?:  =(n 0)  c
   $(n (dec n), c (weld c (get-key-combos-n n z)))
 ::
-::  +search-notes
+::  +search-notes:
+::
+::    get notes from notes that match any key from keys,
+::    more matches from keys appear earlier in matches,
+::    if a note matches ~[%a %b] it won't then match
+::    ~[%a] or ~[%b], don't add [combo ~] to matches
 ::
 ++  search-notes
-  ::  get all notes from n that match any of z,
-  ::  more matches from z appear earlier in s,
-  ::  if a note matches ~[%a %b] it won't then
-  ::  match ~[%a] or ~[%b], don't add all.a to
-  ::  s if it's ~
-  ::  z=~[%a %b]
-  ::  n=:~
-  ::    [~[%a %b %c] "abc"]
-  ::    [~[%b %c %d] "bcd"]
-  ::    [~[%c %d %e] "cde"]
-  ::    [~[%a %b %z] "abz"]
-  ::    ==
-  ::  s=:~
-  ::    [~[%a %b] ~[[~[%a %b %c] "abc"] [~[%a %b %z] "abz"]]]
-  ::    [~[%a] ~]
-  ::    [~[%b] ~[[~[%b %c %d] "bcd"]]]
-  ::    ==
-  |=  [z=keys n=notes]
-  ^-  search
-  ::  flop analysis: ++get-notes-any and
-  ::  ++get-notes-all-not-all both flop
-  ::  so they cancel each other out
-  =.  n         (get-notes-any z n)
-  =/  c=combos  (get-key-combos-all z)
-  =|  s=search
-  ::  try all c on n to construct s
-  ::  s increases by matches of each c
-  ::  n decreases by matches of each c
-  ::  n should be ~ after all c
-  |-  ?~  c  ?~  n  s  ~&  [%n-not-sig n=n]  !!
-    =/  a=all-not-all  (get-notes-all-not-all i.c n)
-    ?~  all.a
-      $(n not-all.a, c t.c)
-  $(s (snoc s [i.c all.a]), n not-all.a, c t.c)
+  |=  [=keys =notes]
+  ^-  matches
+  =/  motes=mold
+    $~((get-notes-any keys notes) ^notes)
+  =/  acc
+    ::  try all combos on motes to construct matches,
+    ::  matches increases by matches of each combo,
+    ::  motes decreases by matches of each combo,
+    ::  dont' add [combo ~] to matches,
+    ::  motes should be ~ after all combos
+    %+  roll  (get-key-combos-all keys)
+    =|  [=combo =motes =matches]
+    |.
+    =/  a  (get-notes-all-not-all combo (^notes motes))
+    [+.a ?~(-.a matches (snoc matches [combo -.a]))]
+  ?>  =(-.acc ~)
+  +.acc
 ::
 ::  state preparation and update
 ::

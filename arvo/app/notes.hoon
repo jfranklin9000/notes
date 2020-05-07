@@ -91,10 +91,10 @@
       ['notes' (notes-to-json notes.match)]
   ==
 ::
-++  search-to-json
-  |=  =search
+++  matches-to-json
+  |=  =matches
   ^-  json
-  a+(turn search |=(=match (match-to-json match)))
+  a+(turn matches |=(=match (match-to-json match)))
 --
 ::
 ^-  agent:gall
@@ -163,10 +163,10 @@
         =/  keywords=cord
           (so:dejs:format (~(got by put) %keys))
         =/  =keys  (keys-from-cord keywords)
-        =/  =search  (search-notes keys all-notes)
+        =/  =matches  (search-notes keys all-notes)
         =/  =json  %-  pairs:enjs:format
-          :~  ['keys' s+keywords]  ::  original
-              ['search' (search-to-json search)]
+          :~  ['keys' s+keywords]  ::  return original
+              ['matches' (matches-to-json matches)]
           ==
         :_  this
         [%give %fact ~[/primary] %json !>(json)]~

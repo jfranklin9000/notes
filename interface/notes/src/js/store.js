@@ -8,7 +8,7 @@ class Store {
         this.state = {
             keys: '',
             text: '',
-            search: null
+            matches: null
         };
 
         // this.initialReducer = new InitialReducer();
@@ -32,8 +32,8 @@ class Store {
         // this.updateReducer.reduce(json, this.state);
         if (json.keys !== undefined)
             this.state.keys = json.keys;
-        if (json.search !== undefined)
-            this.state.search = json.search;
+        if (json.matches !== undefined)
+            this.state.matches = json.matches;
         this.setState(this.state);
     }
 }
