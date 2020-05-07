@@ -70,26 +70,18 @@
   ^-  [^notes ^notes]
   (skid notes |=(=note (key-match-all keys keys.note)))
 ::
-::  +get-key-combos-n:
+::  +get-key-combos-n: get combos of n from keys
 ::
 ++  get-key-combos-n
-  ::  get combinations of n from z
-  ::  n=2  z=~            ~
-  ::  n=0  z=~[%a %b %c]  ~
-  ::  n=1  z=~[%a %b %c]  ~[~[%a] ~[%b] ~[%c]]
-  ::  n=2  z=~[%a %b %c]  ~[~[%a %b] ~[%a %c] ~[%b %c]]
-  ::  n=3  z=~[%a %b %c]  ~[~[%a %b %c]]
-  ::  n=4  z=~[%a %b %c]  ~
-  |=  [n=@ud z=keys]
+  |=  [n=@ud =keys]
   ^-  combos
-  =<  (comb n z ~ ~)
+  =<  (comb n keys ~ ~)
   |%
   ++  comb  ::  internal
     ::
     ::  ref: https://stackoverflow.com/questions/127704/
     ::       algorithm-to-return-all-combinations
     ::       -of-k-elements-from-n
-    ::       (Rick Giuly answer, Python)
     ::
     ::  def comb(sofar, rest, n):
     ::      if n == 0:
@@ -103,7 +95,7 @@
     ::  output: (on separate lines)
     ::  abc abd abe acd ace ade bcd bce bde cde
     ::
-    |=  [n=@ud r=keys s=keys c=combos]
+    |=  [n=@ud r=^keys s=^keys c=combos]
     ::  n = n, r = rest, s = sofar (note order reversal)
     ::  c = combos (running result)
     ^-  combos
@@ -120,23 +112,16 @@
 ::
 ::  +get-key-combos-all:
 ::
+::    get combos of n=(lent keys), n-1, ... 1 from keys
+::
 ++  get-key-combos-all
-  ::  get combinations of n=(lent z), n-1, ... 1 from z
-  ::  z=~            ~
-  ::  z=~[%a]        ~[~[%a]]
-  ::  z=~[%a %b]     ~[~[%a %b] ~[%a] ~[%b]]
-  ::  z=~[%a %b %c]  :~
-  ::                 ~[%a %b %c]
-  ::                 ~[%a %b]  ~[%a %c]  ~[%b %c]
-  ::                 ~[%a]  ~[%b]  ~[%c]
-  ::                 ==
-  |=  z=keys
+  |=  =keys
   ^-  combos
-  =/  n=@ud  (lent z)
-  =|  c=combos
+  =|  =combos
+  =/  n=@ud  (lent keys)
   |-
-    ?:  =(n 0)  c
-  $(n (dec n), c (weld c (get-key-combos-n n z)))
+    ?:  =(n 0)  combos
+  $(n (dec n), combos (weld combos (get-key-combos-n n keys)))
 ::
 ::  +search-notes:
 ::
@@ -154,7 +139,7 @@
     ::  try all combos on motes to construct matches,
     ::  matches increases by matches of each combo,
     ::  motes decreases by matches of each combo,
-    ::  dont' add [combo ~] to matches,
+    ::  don't add [combo ~] to matches,
     ::  motes should be ~ after all combos
     %+  roll  (get-key-combos-all keys)
     =|  [=combo =motes =matches]
@@ -163,6 +148,72 @@
     [+.a ?~(-.a matches (snoc matches [combo -.a]))]
   ?>  =(-.acc ~)
   +.acc
+::
+::  json encoding
+::
+::  +keys-from-cord: XX
+::
+::    add comment about cord to @tas
+::    (look at +sane)
+::
+++  keys-from-cord
+  |=  =cord
+  ^-  keys
+  =/  =tape  (trip cord)
+  =|  =keys
+  =|  key=^tape
+  |-
+    ?~  tape
+      ?~  key
+        keys
+      (snoc keys (crip key))
+    ?.  =(i.tape ' ')
+      $(tape t.tape, key (snoc key i.tape))
+    ?~  key
+      $(tape t.tape)
+    $(tape t.tape, key ~, keys (snoc keys (crip key)))
+::
+::  +keys-to-json: XX
+::
+++  keys-to-json
+  |=  =keys
+  ^-  json
+  a+(turn keys |=(=key s+key))
+::
+::  +note-to-json: XX
+::
+++  note-to-json
+  |=  =note
+  ^-  json
+  %-  pairs:enjs:format
+  :~  ['id' (numb:enjs:format id.note)]
+      ['keys' (keys-to-json keys.note)]
+      ['text' (tape:enjs:format text.note)]
+  ==
+::
+::  +notes-to-json: XX
+::
+++  notes-to-json
+  |=  =notes
+  ^-  json
+  a+(turn notes |=(=note (note-to-json note)))
+::
+::  +match-to-json: XX
+::
+++  match-to-json
+  |=  =match
+  ^-  json
+  %-  pairs:enjs:format
+  :~  ['keys' (keys-to-json keys.match)]
+      ['notes' (notes-to-json notes.match)]
+  ==
+::
+::  +matches-to-json: XX
+::
+++  matches-to-json
+  |=  =matches
+  ^-  json
+  a+(turn matches |=(=match (match-to-json match)))
 ::
 ::  state preparation and update
 ::

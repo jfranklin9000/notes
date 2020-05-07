@@ -6,6 +6,7 @@ class Store {
     constructor() {
         // console.log('Store constructor()');
         this.state = {
+            // id: ?
             keys: '',
             text: '',
             matches: null

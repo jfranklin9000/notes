@@ -7,7 +7,9 @@
 =,  notes
 ::
 |%
+::
 ::  k-eys
+::
 ++  k-a     ~[%a]
 ++  k-b     ~[%b]
 ++  k-c     ~[%c]
@@ -133,6 +135,8 @@
       !>  (get-keys-no-match k-abc k-abc)
   ==
 ::
+::  we omit id.note in the comments
+::
 ++  abc  [1 k-abc "abc"]
 ++  bcd  [3 k-bcd "bcd"]
 ++  cde  [5 k-cde "cde"]
@@ -242,6 +246,16 @@
   ==
 ::
 ++  test-get-key-combos-n
+  ::
+  ::  get combos of n from keys
+  ::
+  ::  n=2  keys=~            ~
+  ::  n=0  keys=~[%a %b %c]  ~
+  ::  n=1  keys=~[%a %b %c]  ~[~[%a] ~[%b] ~[%c]]
+  ::  n=2  keys=~[%a %b %c]  ~[~[%a %b] ~[%a %c] ~[%b %c]]
+  ::  n=3  keys=~[%a %b %c]  ~[~[%a %b %c]]
+  ::  n=4  keys=~[%a %b %c]  ~
+  ::
   ;:  weld
     %+  expect-eq
       !>  ~
@@ -269,6 +283,19 @@
   ==
 ::
 ++  test-get-key-combos-all
+  ::
+  ::  get combos of n=(lent keys), n-1, ... 1 from keys
+  ::
+  ::  keys=~            ~
+  ::  keys=~[%a]        ~[~[%a]]
+  ::  keys=~[%a %b]     ~[~[%a %b] ~[%a] ~[%b]]
+  ::  keys=~[%a %b %c]
+  ::                    :~
+  ::                    ~[%a %b %c]
+  ::                    ~[%a %b]  ~[%a %c]  ~[%b %c]
+  ::                    ~[%a]  ~[%b]  ~[%c]
+  ::                    ==
+  ::
   ;:  weld
     %+  expect-eq
       !>  ~
@@ -350,4 +377,12 @@
       !>  flop-check-matches
       !>  (search-notes k-abcd flop-check-notes)
   ==
+::
+::  ++test-keys-from-cord   XX
+::  ++test-keys-to-json     XX
+::  ++test-note-to-json     XX
+::  ++test-notes-to-json    XX
+::  ++test-match-to-json    XX
+::  ++test-matches-to-json  XX
+::
 --
