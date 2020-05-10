@@ -27,3 +27,41 @@ export class KeywordSearchBar extends Component {
     );
   }
 }
+
+// rename Search or SearchResults
+export class Matches extends Component {
+  matches() {
+    // console.log('Root matches()', this.state);
+    if (this.props.matches === null)
+      return '<p><i>no matches</i></p>';
+
+    let matches = this.props.matches.map(function(match) {
+      // console.log('match', match);
+
+      // let keys = '<span>' + match.keys.join(' ') + '</span>';
+      // console.log('keys', keys);
+
+      let notes = match.notes.map(function(note) {
+        return '<p>' + note.text + '</p>';
+      });
+      // console.log('notes', notes);
+
+      // add Edit button XX
+      return '<div>' + notes.join('<br>') + '</div>';
+    });
+
+    return matches.join('<br>');
+  }
+
+  render() {
+    const { props } = this;
+    console.log('props:', props);
+
+    return (
+      <div
+        dangerouslySetInnerHTML={{ __html: this.matches() }}
+      >
+      </div>
+    );
+  }
+}

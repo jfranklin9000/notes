@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { HeaderBar } from './lib/header-bar.js'
-import { KeywordSearchBar } from './lib/notes-ui.js'
+import { KeywordSearchBar, Matches } from './lib/notes-ui.js'
 
 export class Root extends Component {
 
@@ -40,30 +40,6 @@ export class Root extends Component {
     window.location.replace("/~notes");
   }
 
-  // should be a Component? FIXME
-  matches() {
-    // console.log('Root matches()', this.state);
-    if (this.state.matches === null)
-      return '<p><i>no matches</i></p>';
-
-    let matches = this.state.matches.map(function(match) {
-      // console.log('match', match);
-
-      // let keys = '<span>' + match.keys.join(' ') + '</span>';
-      // console.log('keys', keys);
-
-      let notes = match.notes.map(function(note) {
-        return '<p>' + note.text + '</p>';
-      });
-      // console.log('notes', notes);
-
-      // add Edit button XX
-      return '<div>' + notes.join('<br>') + '</div>';
-    });
-
-    return matches.join('<br>');
-  }
-
   render() {
     const { props, state } = this; // need props?
 
@@ -82,9 +58,9 @@ export class Root extends Component {
                   keysInput={ this.keysInput }
                   searchButton={ this.searchButton }
                 />
-                <div
-                  dangerouslySetInnerHTML={{ __html: this.matches() }}>
-                </div>
+                <Matches
+                  matches={ state.matches }
+                />
               </div>
             )}}
           />
