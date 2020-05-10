@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { HeaderBar } from './lib/header-bar.js'
+import { KeywordSearchBar } from './lib/notes-ui.js'
 
 export class Root extends Component {
 
@@ -11,13 +12,13 @@ export class Root extends Component {
     store.setStateHandler(this.setState.bind(this));
   }
 
-  keys(event) {
-    // console.log('Root keys()', event.target.value);
+  keysInput(event) {
+    // console.log('Root keysInput()', event.target.value);
     this.setState({ keys: event.target.value });
   }
 
-  search() {
-    // console.log('Root search()', this.state);
+  searchButton() {
+    // console.log('Root searchButton()', this.state);
     api.action('notes', 'json',
       { action: 'search', keys: this.state.keys });
   }
@@ -64,7 +65,7 @@ export class Root extends Component {
   }
 
   render() {
-    const { props, state } = this; // move up?
+    const { props, state } = this; // need props?
 
     console.log('Root render()', state, props);
 
@@ -77,28 +78,13 @@ export class Root extends Component {
           <Route exact path="/~notes" render={ () => {
             return (
               <div className="cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden">
-
-                <p style={{ fontSize: 1.0 + 'rem', color: 'lightgray' }}>
-                  Search notes with keywords
-                </p>
-
-                {/* do we want to set value here? */}
-                <input style={{ background: 'lightgray',
-                                fontSize: 1.5 + 'rem',
-                                marginTop: 0.5 + 'rem' }}
-                       value={ state.keys }
-                       onChange={ this.keys.bind(this) }
+                <KeywordSearchBar
+                  keysInput={ this.keysInput }
+                  searchButton={ this.searchButton }
                 />
-
-                <button className="mt3 fr f4"
-                        style={{ color: 'lightgray', cursor: 'pointer' }}
-                        onClick={ this.search.bind(this) }>
-                  Search
-                </button>
-
-                <div dangerouslySetInnerHTML={{ __html: this.matches() }}>
+                <div
+                  dangerouslySetInnerHTML={{ __html: this.matches() }}>
                 </div>
-
               </div>
             )}}
           />
