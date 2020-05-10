@@ -28,13 +28,30 @@
   ?~  a  |
   (levy `keys`a |=(=key (key-match key b)))
 ::
-::  +get-keys-no-match: get keys in a that aren't in b
+::  +get-keys-in: get keys in a that are in b
 ::
-++  get-keys-no-match
+++  get-keys-in
   |=  [a=keys b=keys]
   ^-  keys
-  =|  =keys
+  (skim a |=(=key (key-match key b)))
+::
+::  +get-keys-not-in: get keys in a that are not in b
+::
+++  get-keys-not-in
+  |=  [a=keys b=keys]
+  ^-  keys
   (skip a |=(=key (key-match key b)))
+::
+::  +get-keys-in-not-in:
+::
+::    get cell of:
+::      - keys in a that are in b
+::      - keys in a that are not in b
+::
+++  get-keys-in-not-in
+  |=  [a=keys b=keys]
+  ^-  [keys keys]
+  (skid a |=(=key (key-match key b)))
 ::
 ::  +get-keys-all: get all keys from notes (no duplicates)
 ::
@@ -43,7 +60,7 @@
   ^-  keys
   %+  roll  notes
   =|  [=note =keys]
-  |.  (weld keys (get-keys-no-match keys.note keys))
+  |.  (weld keys (get-keys-not-in keys.note keys))
 ::
 ::  +get-notes-any: get notes matching any key
 ::
@@ -144,8 +161,8 @@
     %+  roll  (get-key-combos-all keys)
     =|  [=combo =motes =matches]
     |.
-    =/  a  (get-notes-all-not-all combo (^notes motes))
-    [+.a ?~(-.a matches (snoc matches [combo -.a]))]
+    =/  ana  (get-notes-all-not-all combo (^notes motes))
+    [+.ana ?~(-.ana matches (snoc matches [combo -.ana]))]
   ?>  =(-.acc ~)
   +.acc
 ::
@@ -156,7 +173,7 @@
 ::    add comment about cord to @tas
 ::    (look at +sane)
 ::
-++  keys-from-cord
+++  keys-from-cord  ::  cord-to-keys
   |=  =cord
   ^-  keys
   =/  =tape  (trip cord)
@@ -172,6 +189,13 @@
     ?~  key
       $(tape t.tape)
     $(tape t.tape, key ~, keys (snoc keys (crip key)))
+::
+:: XX
+::
+++  keys-to-cord
+ |=  =keys
+ ^-  cord
+ (crip (zing (join " " (turn keys |=(=key (trip key))))))
 ::
 ::  +keys-to-json: XX
 ::
@@ -236,7 +260,7 @@
   ^-  keys
   %+  roll  notes-0
   =|  [=note-0 =keys]
-  |.  (weld keys (get-keys-no-match keys.note-0 keys))
+  |.  (weld keys (get-keys-not-in keys.note-0 keys))
 ::
 ++  state-0-to-1
   ~&  %state-0-to-1

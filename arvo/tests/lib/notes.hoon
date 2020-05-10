@@ -18,6 +18,7 @@
 ++  k-ac    ~[%a %c]
 ++  k-az    ~[%a %z]
 ++  k-bc    ~[%b %c]
+++  k-cd    ~[%c %d]
 ++  k-yz    ~[%y %z]
 ++  k-abc   ~[%a %b %c]
 ++  k-abz   ~[%a %b %z]
@@ -103,36 +104,102 @@
       !>  (key-match-all ~ k-abc)
   ==
 ::
-++  test-get-keys-no-match
+++  test-get-keys-in
   ::
-  ::  get keys in a that aren't in b
+  ::  get keys in a that are in b
+  ::
+  ::  a=~               b=~[%a %b %e %f]  ~
+  ::  a=~[%a %b %c %d]  b=~               ~
+  ::  a=~[%a %b %c %d]  b=~[%a %b %e %f]  ~[%a %b]
+  ::  a=~[%a %b %c]     b=~[%d %e %f]     ~
+  ::  a=~[%a %b %c]     b=~[%a %b %c]     ~[%a %b %c]
+  ::
+  ;:  weld
+    %+  expect-eq
+      !>  ~
+      !>  (get-keys-in ~ k-abef)
+  ::
+    %+  expect-eq
+      !>  ~
+      !>  (get-keys-in k-abcd ~)
+  ::
+    %+  expect-eq
+      !>  k-ab
+      !>  (get-keys-in k-abcd k-abef)
+  ::
+    %+  expect-eq
+      !>  ~
+      !>  (get-keys-in k-abc k-def)
+  ::
+    %+  expect-eq
+      !>  k-abc
+      !>  (get-keys-in k-abc k-abc)
+  ==
+::
+++  test-get-keys-not-in
+  ::
+  ::  get keys in a that are not in b
   ::
   ::  a=~               b=~[%a %b %e %f]  ~
   ::  a=~[%a %b %c %d]  b=~               ~[%a %b %c %d]
   ::  a=~[%a %b %c %d]  b=~[%a %b %e %f]  ~[%c %d]
   ::  a=~[%a %b %c]     b=~[%d %e %f]     ~[%a %b %c]
   ::  a=~[%a %b %c]     b=~[%a %b %c]     ~
-  ::
+
   ;:  weld
     %+  expect-eq
       !>  ~
-      !>  (get-keys-no-match ~ k-abef)
+      !>  (get-keys-not-in ~ k-abef)
   ::
     %+  expect-eq
       !>  k-abcd
-      !>  (get-keys-no-match k-abcd ~)
+      !>  (get-keys-not-in k-abcd ~)
   ::
     %+  expect-eq
-      !>  ~[%c %d]
-      !>  (get-keys-no-match k-abcd k-abef)
+      !>  k-cd
+      !>  (get-keys-not-in k-abcd k-abef)
   ::
     %+  expect-eq
       !>  k-abc
-      !>  (get-keys-no-match k-abc k-def)
+      !>  (get-keys-not-in k-abc k-def)
   ::
     %+  expect-eq
       !>  ~
-      !>  (get-keys-no-match k-abc k-abc)
+      !>  (get-keys-not-in k-abc k-abc)
+  ==
+::
+++  test-get-keys-in-not-in
+  ::
+  ::  get cell of:
+  ::    - keys in a that are in b
+  ::    - keys in a that are not in b
+  ::
+  ::  a=~               b=~[%a %b %e %f]  [~ ~]
+  ::  a=~[%a %b %c %d]  b=~               [~ ~[%a %b %c %d]]
+  ::  a=~[%a %b %c %d]  b=~[%a %b %e %f]  [~[%a %b] ~[%c %d]]
+  ::  a=~[%a %b %c]     b=~[%d %e %f]     [~ ~[%a %b %c]]
+  ::  a=~[%a %b %c]     b=~[%a %b %c]     [~[%a %b %c] ~]
+  ::
+  ;:  weld
+    %+  expect-eq
+      !>  [~ ~]
+      !>  (get-keys-in-not-in ~ k-abef)
+  ::
+    %+  expect-eq
+      !>  [~ k-abcd]
+      !>  (get-keys-in-not-in k-abcd ~)
+  ::
+    %+  expect-eq
+      !>  [k-ab k-cd]
+      !>  (get-keys-in-not-in k-abcd k-abef)
+  ::
+    %+  expect-eq
+      !>  [~ k-abc]
+      !>  (get-keys-in-not-in k-abc k-def)
+  ::
+    %+  expect-eq
+      !>  [k-abc ~]
+      !>  (get-keys-in-not-in k-abc k-abc)
   ==
 ::
 ::  we omit id.note in the comments

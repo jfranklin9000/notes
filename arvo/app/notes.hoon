@@ -102,7 +102,7 @@
             (so:dejs:format (~(got by put) %text))
         =.  all-notes  (snoc all-notes note)
         =.  all-keys  %+  weld  all-keys
-          (get-keys-no-match keys.note all-keys)
+          (get-keys-not-in keys.note all-keys)
         `this  ::  FIXME?
       ::
       ?:  =(act 'search')
@@ -129,7 +129,7 @@
         =.  id.note.com  note-id  ::  overwrite
         =.  all-notes  (snoc all-notes note.com)
         =.  all-keys  %+  weld  all-keys
-          (get-keys-no-match keys.note.com all-keys)
+          (get-keys-not-in keys.note.com all-keys)
         `this
       ::
           %search
