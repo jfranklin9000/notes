@@ -81,6 +81,8 @@
     ?>  (team:title our.bowl src.bowl)
     ?+    mark  (on-poke:def mark vase)
     ::
+    ::  XX
+    ::
         %handle-http-request
       =+  !<([eyre-id=@ta =inbound-request:eyre] vase)
       :_  this
@@ -88,15 +90,17 @@
       %+  require-authorization:app  inbound-request
       poke-handle-http-request:nc
     ::
+    ::  browser actions
+    ::
         %json
       =/  put  ((om:dejs:format same) !<(json vase))
       =/  act  (so:dejs:format (~(got by put) %action))
       ::
       ?:  =(act 'add')
         =.  note-id  +(note-id)
-        =/  =note  :+
+        =/  =note  :+  ::  handle like search below? XX
           note-id
-          %-  keys-from-cord
+          %-  cord-to-keys
             (so:dejs:format (~(got by put) %keys))
           %-  trip
             (so:dejs:format (~(got by put) %text))
@@ -106,19 +110,27 @@
         `this  ::  FIXME?
       ::
       ?:  =(act 'search')
-        =/  keywords=cord
+        =|  =search
+        =/  =keys  %-  cord-to-keys
           (so:dejs:format (~(got by put) %keys))
-        =/  =keys  (keys-from-cord keywords)
-        =/  =matches  (search-notes keys all-notes)
-        =/  =json  %-  pairs:enjs:format
-          :~  ['keys' s+keywords]  ::  return original
-              ['matches' (matches-to-json matches)]
+        =/  keys-ini=[^keys ^keys]
+          (get-keys-in-not-in keys all-keys)
+        =.  search
+          %=  search
+            keys     keys
+            keys-in  -.keys-ini
+            keys-ni  +.keys-ini
+            ::  optimization: use -.keys-ini instead of keys
+            matches  (search-notes -.keys-ini all-notes)
           ==
+        =/  =json  (search-to-json search)
         :_  this
         [%give %fact ~[/primary] %json !>(json)]~
       ::
       ~&  >>  [%notes-unknown-action act]
       `this
+    ::
+    ::  dojo commands
     ::
         %noun
       =+  !<(com=command vase)
@@ -133,7 +145,18 @@
         `this
       ::
           %search
-        ~&  (search-notes keys.com all-notes)
+        =|  =search
+        =/  keys-ini=[keys keys]
+          (get-keys-in-not-in keys.com all-keys)
+        =.  search
+          %=  search
+            keys     keys.com
+            keys-in  -.keys-ini
+            keys-ni  +.keys-ini
+            ::  optimization: use -.keys-ini instead of keys.com
+            matches  (search-notes -.keys-ini all-notes)
+          ==
+        ~&  search=search
         `this
       ::
           %dump

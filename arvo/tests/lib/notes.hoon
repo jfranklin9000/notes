@@ -445,11 +445,14 @@
       !>  (search-notes k-abcd flop-check-notes)
   ==
 ::
-::  ++test-keys-from-cord   XX
+::  ++test-cord-to-keys     XX
+::  ++test-keys-to-cord     XX
+::  ++test-key-to-json      XX  add this? XX
 ::  ++test-keys-to-json     XX
 ::  ++test-note-to-json     XX
 ::  ++test-notes-to-json    XX
 ::  ++test-match-to-json    XX
 ::  ++test-matches-to-json  XX
+::  ++test-search-to-json   XX
 ::
 --

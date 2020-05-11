@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export class KeywordSearchBar extends Component {
   render() {
     const { props } = this;
-    // console.log('props:', props);
+    // console.log('KeywordSearchBar render props:', props);
 
     let divC = 'f5';
     let spanC = 'gray3';
@@ -32,10 +32,10 @@ export class KeywordSearchBar extends Component {
 export class Matches extends Component {
   matches() {
     // console.log('Root matches()', this.state);
-    if (this.props.matches === null)
+    if (this.props.search === null)
       return '<p><i>no matches</i></p>';
 
-    let matches = this.props.matches.map(function(match) {
+    let matches = this.props.search.matches.map(function(match) {
       // console.log('match', match);
 
       // let keys = '<span>' + match.keys.join(' ') + '</span>';
@@ -55,7 +55,7 @@ export class Matches extends Component {
 
   render() {
     const { props } = this;
-    console.log('props:', props);
+    // console.log('Matches render props:', props);
 
     return (
       <div

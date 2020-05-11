@@ -23,13 +23,13 @@ export class Root extends Component {
       { action: 'search', keys: this.state.keys });
   }
 
-  text() {
-    // console.log('Root text()', event.target.value);
+  textTextArea() {
+    // console.log('Root textTextArea()', event.target.value);
     this.setState({ text: event.target.value });
   }
 
-  add() {
-    // console.log('Root add()', this.state);
+  addButton() {
+    // console.log('Root addButton()', this.state);
     api.action('notes', 'json',
       { action: 'add', id: 0, keys: this.state.keys, text: this.state.text });
 
@@ -59,7 +59,7 @@ export class Root extends Component {
                   searchButton={ this.searchButton }
                 />
                 <Matches
-                  matches={ state.matches }
+                  search={ state.search }
                 />
               </div>
             )}}
@@ -78,20 +78,20 @@ export class Root extends Component {
                                 fontSize: 1.5 + 'rem',
                                 marginTop: 0.5 + 'rem' }}
                        value={ state.keys }
-                       onChange={ this.keys.bind(this) }
+                       onChange={ this.keysInput.bind(this) }
                 />
 
                 {/* do we want to set value here? */}
                 <textarea className="br pa2 pre"
                           style={{ flexBasis: '50%', resize: 'none' }}
                           value={ state.text }
-                          onChange={ this.text.bind(this) }
+                          onChange={ this.textTextArea.bind(this) }
                 >
                 </textarea>
 
                 <button className="mt3 fr f4"
                         style={{ color: 'lightgray', cursor: 'pointer' }}
-                        onClick={ this.add.bind(this) }>
+                        onClick={ this.addButton.bind(this) }>
                   Add
                 </button>
 

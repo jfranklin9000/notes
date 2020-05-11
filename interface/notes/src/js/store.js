@@ -6,10 +6,9 @@ class Store {
     constructor() {
         // console.log('Store constructor()');
         this.state = {
-            // id: ?
             keys: '',
             text: '',
-            matches: null
+            search: null
         };
 
         // this.initialReducer = new InitialReducer();
@@ -31,10 +30,8 @@ class Store {
         // this.initialReducer.reduce(json, this.state);
         // this.configReducer.reduce(json, this.state);
         // this.updateReducer.reduce(json, this.state);
-        if (json.keys !== undefined)
-            this.state.keys = json.keys;
-        if (json.matches !== undefined)
-            this.state.matches = json.matches;
+        if (json.search !== undefined)
+            this.state.search = json.search;
         this.setState(this.state);
     }
 }

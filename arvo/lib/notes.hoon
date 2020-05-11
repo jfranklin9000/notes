@@ -147,7 +147,7 @@
 ::    if a note matches ~[%a %b] it won't then match
 ::    ~[%a] or ~[%b], don't add [combo ~] to matches
 ::
-++  search-notes
+++  search-notes               ::  rename get-matches XX
   |=  [=keys =notes]
   ^-  matches
   =/  motes=mold
@@ -168,12 +168,12 @@
 ::
 ::  json encoding
 ::
-::  +keys-from-cord: XX
+::  +cord-to-keys: XX
 ::
 ::    add comment about cord to @tas
 ::    (look at +sane)
 ::
-++  keys-from-cord  ::  cord-to-keys
+++  cord-to-keys
   |=  =cord
   ^-  keys
   =/  =tape  (trip cord)
@@ -190,7 +190,7 @@
       $(tape t.tape)
     $(tape t.tape, key ~, keys (snoc keys (crip key)))
 ::
-:: XX
+::  +keys-to-cord: XX
 ::
 ++  keys-to-cord
  |=  =keys
@@ -238,6 +238,20 @@
   |=  =matches
   ^-  json
   a+(turn matches |=(=match (match-to-json match)))
+::
+::  +search-to-json: XX
+::
+++  search-to-json
+  |=  =search
+  ^-  json
+  %-  pairs:enjs:format
+  :~  :-  'search'
+          %-  pairs:enjs:format
+          :~  :-  'keys'     (keys-to-json keys.search)
+              :-  'keys-in'  (keys-to-json keys-in.search)
+              :-  'keys-ni'  (keys-to-json keys-ni.search)
+              :-  'matches'  (matches-to-json matches.search)
+  ==      ==
 ::
 ::  state preparation and update
 ::

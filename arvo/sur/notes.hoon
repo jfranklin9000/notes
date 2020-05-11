@@ -15,6 +15,15 @@
 +$  match    [=keys =notes]
 +$  matches  (list match)
 ::
+::  $search: search result
+::
++$  search
+  $:  =keys         ::  keys from user (list form)
+      keys-in=keys  ::  keys in all-keys
+      keys-ni=keys  ::  keys not in all-keys
+      =matches      ::  matches of keys in all-notes
+  ==
+::
 +$  command
   $%  [%add =note]
       [%search =keys]
@@ -49,6 +58,7 @@
       ::  used for +snag because of note deletions (and
       ::  note re-ordering, if that ever exists)
       note-id=@ud
+      ::  XX comment about invariant
       all-notes=notes
       all-keys=keys
   ==
