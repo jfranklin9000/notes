@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { HeaderBar } from './lib/header-bar.js'
-import { KeywordSearchBar, Matches } from './lib/notes-ui.js'
+import { KeywordSearchBar, SearchResults } from './lib/notes-ui.js'
 
 export class Root extends Component {
 
@@ -58,7 +58,7 @@ export class Root extends Component {
                   keysInput={ this.keysInput }
                   searchButton={ this.searchButton }
                 />
-                <Matches
+                <SearchResults
                   search={ state.search }
                 />
               </div>

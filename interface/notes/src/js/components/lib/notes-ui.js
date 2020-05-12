@@ -28,39 +28,62 @@ export class KeywordSearchBar extends Component {
   }
 }
 
-// rename Search or SearchResults
-export class Matches extends Component {
-  matches() {
-    // console.log('Root matches()', this.state);
-    if (this.props.search === null)
-      return '<p><i>no matches</i></p>';
+/**
+function keyMatch(key, keys)
+{
+  // use lodash?
+  for (let i = 0; i < keys.length; i++)
+    if (key == keys[i])
+      return true;
 
-    let matches = this.props.search.matches.map(function(match) {
-      // console.log('match', match);
+  return false;
+}
+**/
 
-      // let keys = '<span>' + match.keys.join(' ') + '</span>';
-      // console.log('keys', keys);
-
-      let notes = match.notes.map(function(note) {
-        return '<p>' + note.text + '</p>';
-      });
-      // console.log('notes', notes);
-
-      // add Edit button XX
-      return '<div>' + notes.join('<br>') + '</div>';
-    });
-
-    return matches.join('<br>');
-  }
-
+// export
+class KeysInNotIn extends Component {
   render() {
-    const { props } = this;
-    // console.log('Matches render props:', props);
-
+    const keysIn = this.props.keysIn.map((key, n) => {
+      return <span key={n} style={{color:'green'}}>{key}</span>;
+    });
+    const keysNi = this.props.keysNi.map((key, n) => {
+      return <span key={n} style={{color:'red'}}>{key}</span>;
+    });
     return (
-      <div
-        dangerouslySetInnerHTML={{ __html: this.matches() }}
-      >
+      <div>
+        {keysIn}
+        {keysNi}
+      </div>
+    );
+  }
+}
+
+// export
+class Matches extends Component {
+  render() {
+    const matches = this.props.matches.map((match, n) => {
+      // do something with match.keys FIXME
+      let notes = match.notes.map((note, n) => {
+        return <p key={n}>{note.text}</p>;
+      });
+      return <div key={n}>{notes}</div>
+    });
+    return <div>{matches}</div>;
+  }
+}
+
+export class SearchResults extends Component {
+  render() {
+    const search = this.props.search;
+    return (
+      <div>
+        <KeysInNotIn
+          keysIn={search.keysIn}
+          keysNi={search.keysNi}
+        />
+        <Matches
+          matches={search.matches}
+        />
       </div>
     );
   }

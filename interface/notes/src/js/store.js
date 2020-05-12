@@ -8,7 +8,11 @@ class Store {
         this.state = {
             keys: '',
             text: '',
-            search: null
+            search: {
+              keysIn: [],
+              keysNi: [],
+              matches: []
+            }
         };
 
         // this.initialReducer = new InitialReducer();

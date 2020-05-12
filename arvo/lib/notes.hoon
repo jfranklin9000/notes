@@ -248,8 +248,8 @@
   :~  :-  'search'
           %-  pairs:enjs:format
           :~  :-  'keys'     (keys-to-json keys.search)
-              :-  'keys-in'  (keys-to-json keys-in.search)
-              :-  'keys-ni'  (keys-to-json keys-ni.search)
+              :-  'keysIn'   (keys-to-json keys-in.search)
+              :-  'keysNi'   (keys-to-json keys-ni.search)
               :-  'matches'  (matches-to-json matches.search)
   ==      ==
 ::
