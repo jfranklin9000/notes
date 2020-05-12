@@ -2,24 +2,21 @@ import React, { Component } from 'react';
 
 export class KeywordSearchBar extends Component {
   render() {
-    const { props } = this;
-    // console.log('KeywordSearchBar render props:', props);
-
-    let divC = 'f5';
-    let spanC = 'gray3';
-    let inputC = 'bg-gray4 black';
-    let buttonC = 'ba b--green2 green2 br1 pointer';
-
+    const props = this.props;
+    const divC = 'flex flex-row justify-center items-baseline f5';
+    const spanC = 'mr3 gray3';
+    const inputC = 'w-50 bg-gray4 black tc';
+    const buttonC = 'ml3 ba b--green2 green2 br1 pointer';
     return (
-      <div className={ divC }>
-        <span className={ spanC }>Keywords</span>
-        <input
-          className={ inputC }
-          onChange={ props.keysInput.bind(this) }
+      <div className={divC}>
+        <span className={spanC}>
+          Keywords
+        </span>
+        <input className={inputC}
+          onChange={props.keysInput.bind(this)}
         />
-        <button
-          className={ buttonC }
-          onClick={ props.searchButton.bind(this) }
+        <button className={buttonC}
+          onClick={props.searchButton.bind(this)}
         >
           Search
         </button>
