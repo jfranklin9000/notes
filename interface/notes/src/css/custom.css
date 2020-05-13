@@ -56,6 +56,7 @@ textarea, select, input, button {
   line-height: 16px;
   font-weight: 600;
 }
+
 .mono {
   font-family: "Source Code Pro", monospace;
 }
@@ -66,6 +67,10 @@ textarea, select, input, button {
 
 .mix-blend-diff {
   mix-blend-mode: difference;
+}
+
+.pointer-events-none {
+  pointer-events: none;
 }
 
 /* dark */

@@ -10,7 +10,7 @@ export class KeywordsSearchNewNote extends Component {
     // const buttonC = 'ml3 ba b--green2 green2 br1 pointer';
     // instead we will put the New Note button here:
     // (no flex here..)
-    const divC = 'f5';
+    const divC = 'f6';
     const spanC = 'fl mr3 gray3 pt1';
     const inputC = 'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2';
     const searchC = 'fl ml3 ba b--green2 green2 br1 pointer pt1';
@@ -102,13 +102,23 @@ export class SearchResults extends Component {
 export class KeywordsSaveGoToSearch extends Component {
   render() {
     const props = this.props;
-    const divC = 'f5';
+    const divC = 'f6';
     const spanC = 'fl mr3 gray3 pt1';
     const inputC = 'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2';
 // this should be gray if up-to-date XX
-    const saveC = 'fr ml3 ba b--green2 green2 br1 pointer pt1';
+//  const saveC = 'fr ml3 ba b--green2 green2 br1 pointer pt1';
+    let saveC = 'fr ml3 ba br1 pt1';
 // this could be yellow if not up-to-date XX
-    const goToSearchC = 'fr ml3 ba b--green2 green2 br1 pointer pt1';
+//  const goToSearchC = 'fr ml3 ba b--green2 green2 br1 pointer pt1';
+    let goToSearchC = 'fr ml3 ba br1 pointer pt1';
+    const edited = false;
+    if (edited) {
+      saveC += ' b-red2 red2 pointer';
+      goToSearchC += ' b-yellow2 yellow2';
+    } else {
+      saveC += ' b-gray3 gray3 pointer-events-none';
+      goToSearchC += ' b-green2 green2';
+    }
     return (
       <div className={divC}>
         <span className={spanC}>

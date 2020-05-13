@@ -39,14 +39,14 @@ export class Root extends Component {
 
   saveButton() {
     // console.log('Root saveButton()', this.state);
-
-console.log('HELLO from saveButton()');
   }
 
   goToSearchButton() {
     // console.log('Root goToSearchButton()', this.state);
 
-console.log('HELLO from goToSearchButton()');
+    // what about if note edited? XX
+    // yeesh, probably not right, but it works
+    window.location.replace('/~notes');
   }
 
   textTextArea() {
