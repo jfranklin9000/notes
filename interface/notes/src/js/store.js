@@ -27,7 +27,7 @@ class Store {
     }
 
     handleEvent(data) {
-        console.log('Store handleEvent()', data);
+        // console.log('Store handleEvent()', data);
         let json = data.data;
         console.log(json);
 

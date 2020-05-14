@@ -20,8 +20,13 @@ export class Root extends Component {
 
   searchButton() {
     // console.log('Root searchButton()', this.state);
+    // on page reload this.state is null (not sure why), so
+    // if you immediately click the Search button you get:
+    // Uncaught TypeError: Cannot read property 'keys' of null
+    // do something reasonable until i figure it out: XX
+    let keys = this.state === null ? '' : this.state.keys;
     api.action('notes', 'json',
-      {action: 'search', keys: this.state.keys});
+      {action: 'search', keys: keys});
   }
 
   newNoteButton() {
