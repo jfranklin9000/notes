@@ -501,6 +501,8 @@
       !>  (get-matches-no-keys some-notes)
     ==
 ::
+::  ++test-get-search       XX
+::
 ::  ++test-cord-to-keys     XX
 ::  ++test-keys-to-cord     XX
 ::  ++test-key-to-json      XX  add this? XX

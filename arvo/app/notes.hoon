@@ -81,7 +81,7 @@
     ?>  (team:title our.bowl src.bowl)
     ?+    mark  (on-poke:def mark vase)
     ::
-    ::  XX
+    ::  XX file server?
     ::
         %handle-http-request
       =+  !<([eyre-id=@ta =inbound-request:eyre] vase)
@@ -110,25 +110,9 @@
         `this  ::  FIXME?
       ::
       ?:  =(act 'search')
-        =|  =search
-        =/  =keys  %-  cord-to-keys
-          (so:dejs:format (~(got by put) %keys))
-        =/  keys-ini=[^keys ^keys]
-          (get-keys-in-not-in keys all-keys)
-        =.  search
-          %=  search
-            keys     keys
-            keys-in  -.keys-ini
-            keys-ni  +.keys-ini
-            ::  if no keys sent..
-            :: test w/o this to see if it still works
-            matches  ?~  keys
-                       ::  ..give notes with no keys
-                       (get-matches-no-keys all-notes)
-                     ::  optimization:
-                     ::  use -.keys-ini instead of keys
-                     (get-matches -.keys-ini all-notes)
-          ==
+        =/  =keys
+          (cord-to-keys (so:dejs:format (~(got by put) %keys)))
+        =/  =search  (get-search keys all-keys all-notes)
         =/  =json  (search-to-json search)
         :_  this
         [%give %fact ~[/primary] %json !>(json)]~
@@ -151,17 +135,7 @@
         `this
       ::
           %search
-        =|  =search
-        =/  keys-ini=[keys keys]
-          (get-keys-in-not-in keys.com all-keys)
-        =.  search
-          %=  search
-            keys     keys.com
-            keys-in  -.keys-ini
-            keys-ni  +.keys-ini
-            ::  optimization: use -.keys-ini instead of keys.com
-            matches  (get-matches -.keys-ini all-notes)
-          ==
+        =/  =search  (get-search keys.com all-keys all-notes)
         ~&  search=search
         `this
       ::

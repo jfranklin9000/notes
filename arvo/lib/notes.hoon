@@ -177,6 +177,32 @@
       (skim notes |=(=note =(keys.note ~)))
   ==
 ::
+::  +get-search: XX add to test suite
+::
+::    add note about all=keys
+::    (it's for the ui)
+::
+++  get-search
+  |=  [=keys all=keys =notes]
+  ^-  search
+  =/  keys-ini=[^keys ^keys]
+    (get-keys-in-not-in keys all)
+  =|  =search
+  =.  search
+    %=  search
+      keys     keys
+      keys-in  -.keys-ini
+      keys-ni  +.keys-ini
+      matches  ?~  keys
+                 (get-matches-no-keys notes)
+               ::  optimization:
+               ::  use -.keys-ini instead of keys
+               ::  note: all-keys and all-notes (in
+               ::        state) must be consistent
+               (get-matches -.keys-ini notes)
+    ==
+  search
+::
 ::  json encoding
 ::
 ::  +cord-to-keys: XX
