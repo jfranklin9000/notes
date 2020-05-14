@@ -140,14 +140,14 @@
     ?:  =(n 0)  combos
   $(n (dec n), combos (weld combos (get-key-combos-n n keys)))
 ::
-::  +search-notes:
+::  +get-matches:
 ::
-::    get notes from notes that match any key from keys,
+::    get matches from notes that match any key from keys,
 ::    more matches from keys appear earlier in matches,
 ::    if a note matches ~[%a %b] it won't then match
 ::    ~[%a] or ~[%b], don't add [combo ~] to matches
 ::
-++  search-notes               ::  rename get-matches XX
+++  get-matches
   |=  [=keys =notes]
   ^-  matches
   =/  motes=mold
@@ -165,6 +165,17 @@
     [+.ana ?~(-.ana matches (snoc matches [combo -.ana]))]
   ?>  =(-.acc ~)
   +.acc
+::
+::  +get-matches-no-keys:
+::
+::    get matches from notes that have no keys
+::
+++  get-matches-no-keys
+  |=  =notes
+  ^-  matches
+  :~  :-  ~
+      (skim notes |=(=note =(keys.note ~)))
+  ==
 ::
 ::  json encoding
 ::

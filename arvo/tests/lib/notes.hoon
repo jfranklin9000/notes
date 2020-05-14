@@ -108,6 +108,7 @@
   ::
   ::  get keys in a that are in b
   ::
+  ::  a=~               b=~               ~
   ::  a=~               b=~[%a %b %e %f]  ~
   ::  a=~[%a %b %c %d]  b=~               ~
   ::  a=~[%a %b %c %d]  b=~[%a %b %e %f]  ~[%a %b]
@@ -115,6 +116,10 @@
   ::  a=~[%a %b %c]     b=~[%a %b %c]     ~[%a %b %c]
   ::
   ;:  weld
+    %+  expect-eq
+      !>  ~
+      !>  (get-keys-in ~ ~)
+  ::
     %+  expect-eq
       !>  ~
       !>  (get-keys-in ~ k-abef)
@@ -140,13 +145,18 @@
   ::
   ::  get keys in a that are not in b
   ::
+  ::  a=~               b=~               ~
   ::  a=~               b=~[%a %b %e %f]  ~
   ::  a=~[%a %b %c %d]  b=~               ~[%a %b %c %d]
   ::  a=~[%a %b %c %d]  b=~[%a %b %e %f]  ~[%c %d]
   ::  a=~[%a %b %c]     b=~[%d %e %f]     ~[%a %b %c]
   ::  a=~[%a %b %c]     b=~[%a %b %c]     ~
-
+  ::
   ;:  weld
+    %+  expect-eq
+      !>  ~
+      !>  (get-keys-not-in ~ ~)
+  ::
     %+  expect-eq
       !>  ~
       !>  (get-keys-not-in ~ k-abef)
@@ -174,6 +184,7 @@
   ::    - keys in a that are in b
   ::    - keys in a that are not in b
   ::
+  ::  a=~               b=~               [~ ~]
   ::  a=~               b=~[%a %b %e %f]  [~ ~]
   ::  a=~[%a %b %c %d]  b=~               [~ ~[%a %b %c %d]]
   ::  a=~[%a %b %c %d]  b=~[%a %b %e %f]  [~[%a %b] ~[%c %d]]
@@ -181,6 +192,10 @@
   ::  a=~[%a %b %c]     b=~[%a %b %c]     [~[%a %b %c] ~]
   ::
   ;:  weld
+    %+  expect-eq
+      !>  [~ ~]
+      !>  (get-keys-in-not-in ~ ~)
+  ::
     %+  expect-eq
       !>  [~ ~]
       !>  (get-keys-in-not-in ~ k-abef)
@@ -208,8 +223,10 @@
 ++  bcd  [3 k-bcd "bcd"]
 ++  cde  [5 k-cde "cde"]
 ++  abz  [7 k-abz "abz"]
+++  n-1  [8 ~ "no keys 1"]
+++  n-2  [9 ~ "no keys 2"]
 ::
-++  some-notes  ~[abc bcd cde abz]
+++  some-notes  ~[abc bcd cde n-1 abz n-2]
 ::
 ++  test-get-keys-all
   ::
@@ -221,7 +238,9 @@
   ::    [~[%a %b %c] "abc"]
   ::    [~[%b %c %d] "bcd"]
   ::    [~[%c %d %e] "cde"]
+  ::    [~ "no keys 1"]
   ::    [~[%a %b %z] "abz"]
+  ::    [~ "no keys 2"]
   ::    ==
   ::                         ~[%a %b %c %d %e %z]
   ::
@@ -245,7 +264,9 @@
   ::    [~[%a %b %c] "abc"]
   ::    [~[%b %c %d] "bcd"]
   ::    [~[%c %d %e] "cde"]
+  ::    [~ "no keys 1"]
   ::    [~[%a %b %z] "abz"]
+  ::    [~ "no keys 2"]
   ::    ==
   ::                         :~
   ::                         [~[%a %b %c] "abc"]
@@ -269,7 +290,9 @@
   ::    [~[%a %b %c] "abc"]
   ::    [~[%b %c %d] "bcd"]
   ::    [~[%c %d %e] "cde"]
+  ::    [~ "no keys 1"]
   ::    [~[%a %b %z] "abz"]
+  ::    [~ "no keys 2"]
   ::    ==
   ::                         :~
   ::                         [~[%a %b %c] "abc"]
@@ -294,7 +317,9 @@
   ::    [~[%a %b %c] "abc"]
   ::    [~[%b %c %d] "bcd"]
   ::    [~[%c %d %e] "cde"]
+  ::    [~ "no keys 1"]
   ::    [~[%a %b %z] "abz"]
+  ::    [~ "no keys 2"]
   ::    ==
   ::                         :-
   ::                         :~
@@ -304,11 +329,13 @@
   ::                         :~
   ::                         [~[%b %c %d] "bcd"]
   ::                         [~[%c %d %e] "cde"]]
+  ::                         [~ "no keys 1"]
+  ::                         [~ "no keys 2"]
   ::                         ==
   ::
   ;:  weld
     %+  expect-eq
-      !>  [~[abc abz] ~[bcd cde]]
+      !>  [~[abc abz] ~[bcd cde n-1 n-2]]
       !>  (get-notes-all-not-all k-ab some-notes)
   ==
 ::
@@ -408,9 +435,9 @@
       [k-d ~[dmn duv dxy]]
   ==
 ::
-++  test-search-notes
+++  test-get-matches
   ::
-  ::  get notes from notes that match any key from keys,
+  ::  get matches from notes that match any key from keys,
   ::  more matches from keys appear earlier in matches,
   ::  if a note matches ~[%a %b] it won't then match
   ::  ~[%a] or ~[%b], don't add [combo ~] to matches
@@ -421,7 +448,9 @@
   ::    [~[%a %b %c] "abc"]
   ::    [~[%b %c %d] "bcd"]
   ::    [~[%c %d %e] "cde"]
+  ::    [~ "no keys 1"]
   ::    [~[%a %b %z] "abz"]
+  ::    [~ "no keys 2"]
   ::    ==
   ::                         :~
   ::                         :-  ~[%a %b]
@@ -438,12 +467,39 @@
   ;:  weld
     %+  expect-eq
       !>  ~[[k-ab ~[abc abz]] [k-b ~[bcd]]]
-      !>  (search-notes k-ab some-notes)
+      !>  (get-matches k-ab some-notes)
   ::
     %+  expect-eq
       !>  flop-check-matches
-      !>  (search-notes k-abcd flop-check-notes)
+      !>  (get-matches k-abcd flop-check-notes)
   ==
+::
+++  test-get-matches-no-keys
+  ::
+  ::  get matches from notes that have no keys
+  ::
+  ::  notes=
+  ::    :~
+  ::    [~[%a %b %c] "abc"]
+  ::    [~[%b %c %d] "bcd"]
+  ::    [~[%c %d %e] "cde"]
+  ::    [~ "no keys 1"]
+  ::    [~[%a %b %z] "abz"]
+  ::    [~ "no keys 2"]
+  ::    ==
+  ::                         :~
+  ::                         :-  ~
+  ::                             :~
+  ::                             [~ "no keys 1"]
+  ::                             [~ "no keys 2"]
+  ::                             ==
+  ::                         ==
+  ::
+  ;:  weld
+    %+  expect-eq
+      !>  ~[[~ ~[n-1 n-2]]]
+      !>  (get-matches-no-keys some-notes)
+    ==
 ::
 ::  ++test-cord-to-keys     XX
 ::  ++test-keys-to-cord     XX

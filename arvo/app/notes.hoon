@@ -120,8 +120,14 @@
             keys     keys
             keys-in  -.keys-ini
             keys-ni  +.keys-ini
-            ::  optimization: use -.keys-ini instead of keys
-            matches  (search-notes -.keys-ini all-notes)
+            ::  if no keys sent..
+            :: test w/o this to see if it still works
+            matches  ?~  keys
+                       ::  ..give notes with no keys
+                       (get-matches-no-keys all-notes)
+                     ::  optimization:
+                     ::  use -.keys-ini instead of keys
+                     (get-matches -.keys-ini all-notes)
           ==
         =/  =json  (search-to-json search)
         :_  this
@@ -154,7 +160,7 @@
             keys-in  -.keys-ini
             keys-ni  +.keys-ini
             ::  optimization: use -.keys-ini instead of keys.com
-            matches  (search-notes -.keys-ini all-notes)
+            matches  (get-matches -.keys-ini all-notes)
           ==
         ~&  search=search
         `this
