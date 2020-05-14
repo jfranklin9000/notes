@@ -51,18 +51,22 @@ function keyMatch(key, keys)
 **/
 
 // export
-class KeysInNotIn extends Component {
+class KeysNotIn extends Component {
   render() {
-    const keysIn = this.props.keysIn.map((key, n) => {
-      return <span key={n} style={{color:'green'}}>{key}</span>;
-    });
-    const keysNi = this.props.keysNi.map((key, n) => {
-      return <span key={n} style={{color:'red'}}>{key}</span>;
+    const keys = this.props.keysNi;
+    if (keys == null || keys.length == 0)
+      return null;
+    const message = keys.length == 1
+      ? 'This keyword matched no notes'
+      : 'These keywords matched no notes';
+    const _span = 'f6 red2 ml1 mr1';
+    const spans = keys.map((key, n) => {
+      return <span key={n} className={_span}>{key}</span>;
     });
     return (
-      <div>
-        {keysIn}
-        {keysNi}
+      <div className={'mt3'}>
+        <p className={'f8 tc'}>{message}</p>
+        <div className={'mt1 tc'}>{spans}</div>
       </div>
     );
   }
@@ -87,8 +91,7 @@ export class SearchResults extends Component {
     const search = this.props.search;
     return (
       <div>
-        <KeysInNotIn
-          keysIn={search.keysIn}
+        <KeysNotIn
           keysNi={search.keysNi}
         />
         <Matches
