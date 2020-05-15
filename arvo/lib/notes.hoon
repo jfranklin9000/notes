@@ -173,9 +173,9 @@
 ++  get-matches-no-keys
   |=  =notes
   ^-  matches
-  :~  :-  ~
-      (skim notes |=(=note =(keys.note ~)))
-  ==
+  =/  nok=^notes  (skim notes |=(=note =(keys.note ~)))
+  ?~  nok  ~
+  ~[[~ nok]]
 ::
 ::  +get-search: XX add to test suite
 ::

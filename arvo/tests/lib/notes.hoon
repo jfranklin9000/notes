@@ -497,8 +497,17 @@
   ::
   ;:  weld
     %+  expect-eq
+      !>  ~
+      !>  (get-matches-no-keys ~)
+    ::
+    %+  expect-eq
+      !>  ~
+      !>  (get-matches-no-keys ~[abc bcd])
+    ::
+    %+  expect-eq
       !>  ~[[~ ~[n-1 n-2]]]
       !>  (get-matches-no-keys some-notes)
+    ::
     ==
 ::
 ::  ++test-get-search       XX
