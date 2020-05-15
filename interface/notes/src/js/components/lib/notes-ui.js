@@ -38,18 +38,6 @@ export class KeywordsSearchNewNote extends Component {
   }
 }
 
-/**
-function keyMatch(key, keys)
-{
-  // use lodash?
-  for (let i = 0; i < keys.length; i++)
-    if (key == keys[i])
-      return true;
-
-  return false;
-}
-**/
-
 // export
 class KeysNotIn extends Component {
   render() {
@@ -75,10 +63,34 @@ class KeysNotIn extends Component {
   }
 }
 
+function keyMatch(key, keys)
+{
+  // what about keys==null? XX
+  return keys.some((k) => { return k == key; });
+}
+
+function formatKeys(keysIn, keys)
+{
+  // check keys for null XX (need actual note with no keywords to test this)
+  // (or could just hack to return no keys)
+  const ks = keys.map((key, n) => {
+    const color = keyMatch(key, keysIn) ? 'green2' : 'gray3';
+    return (
+      <span key={n} className={'ml1 mr1 ' + color}>
+        {key}
+      </span>
+    );
+  });
+  return (
+    <div className={'f7 bt b--gray2 mt2 pt2 tc'}>{ks}</div>
+  );
+}
+
 // export
 class Matches extends Component {
   render() {
     const matches = this.props.matches;
+    const keysIn = this.props.keysIn;
     if (matches == null || matches.length == 0)
       return (
         <p className={'f7 gray3 tc mt7 i'}>
@@ -89,9 +101,12 @@ class Matches extends Component {
       // do something with match.keys FIXME
       let notes = match.notes.map((note, n) => {
         return (
-          <p key={n} className={'f7 bt b--gray4 mt2 pt2'}>
-            {note.text}
-          </p>
+          <div key={n}>
+            {formatKeys(keysIn, note.keys)}
+            <p className={'f7 bt b--gray4 mt2 pt2'}>  {/* don't need key={n} here? correct */}
+              {note.text}
+            </p>
+          </div>
         );
       });
       return (
@@ -99,7 +114,7 @@ class Matches extends Component {
       );
     });
     return (
-      <div className={'bb b--gray4 pb2'}>{ms}</div>
+      <div className={'bb b--gray2 pb2'}>{ms}</div>
     );
   }
 }
@@ -110,7 +125,7 @@ export class SearchResults extends Component {
     return (
       <div>
         <KeysNotIn keysNi={search.keysNi} />
-        <Matches matches={search.matches} />
+        <Matches matches={search.matches} keysIn={search.keysIn} />
       </div>
     );
   }
