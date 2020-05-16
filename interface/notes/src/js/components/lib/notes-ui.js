@@ -51,7 +51,7 @@ class KeysNotIn extends Component {
     return (
       <div className={'mt3'}>
         <p className={'f8 tc'}>{message}</p>
-        <div className={'mt1 tc'}>{ks}</div>
+        <div className={'mb3 tc'}>{ks}</div>
       </div>
     )
   }
@@ -83,12 +83,15 @@ class Matches extends Component {
     const props = this.props
     const matches = props.matches
     const keysIn = props.keysIn
-    if (matches == null || matches.length == 0)
+    // combine with below XX
+    // factor out <p> classNames
+    if (matches == null || matches.length == 0) {
       return (
-        <p className={'f7 gray3 tc mt7 i'}>
+        <p className={'f7 bt b--gray2 gray3 tc mt2 pt2 i'}>
           no matches
         </p>
       )
+    }
     const ms = matches.map((match, n) => {
       let notes = match.notes.map((note, n) => {
         let text = note.text
@@ -125,7 +128,7 @@ export class SearchResults extends Component {
     const props = this.props
     const search = props.search
     return (
-      <div>
+      <div className={'mt2'}>
         <KeysNotIn keysNi={search.keysNi} />
         <Matches
           matchClickCB={props.matchClickCB}
