@@ -19,18 +19,19 @@ export class Root extends Component {
     this.setState({keys: event.target.value, edited: true})
   }
 
-  searchButton() {
+  searchButton(event) {
     // console.log('Root searchButton()', this.state)
     // on page reload this.state is null (not sure why), so
     // if you immediately click the Search button you get:
     // Uncaught TypeError: Cannot read property 'keys' of null
     // do something reasonable until i figure it out: XX
+    // is this true with my new callback scheme?
     const keys = this.state ? this.state.keys : ''
     api.action('notes', 'json',
       {action: 'search', keys: keys})  //  rename keywords
   }
 
-  newNoteButton() {
+  newNoteButton(event) {
     // console.log('Root newNoteButton()', this.state)
     api.action('notes', 'json',
       {action: 'new-note'})
@@ -50,7 +51,7 @@ export class Root extends Component {
     window.location.replace('/~notes/note/' + id)
   }
 
-  saveButton() {
+  saveButton(event) {
     // console.log('Root saveButton()', this.state)
     // see searchButton note about page reload
     const state = this.state
@@ -62,7 +63,7 @@ export class Root extends Component {
     //   {action: 'save', id: 0, keys: state.keys, text: state.text})
   }
 
-  goToSearchButton() {
+  goToSearchButton(event) {
     // console.log('Root goToSearchButton()', this.state)
     // what about if note edited? XX
     // yeesh, probably not right, but it works
@@ -86,9 +87,9 @@ export class Root extends Component {
             return (
               <div className='cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden'>
                 <KeywordsSearchNewNote
-                  keysInput={this.keysInput}
-                  searchButton={this.searchButton}
-                  newNoteButton={this.newNoteButton}
+                  keysInputCB={(e) => this.keysInput(e)}
+                  searchButtonCB={(e) => this.searchButton(e)}
+                  newNoteButtonCB={(e) => this.newNoteButton(e)}
                 />
                 <SearchResults
                   matchClickCB={(e) => this.matchClick(e)}
@@ -100,12 +101,13 @@ export class Root extends Component {
           <Route exact path='/~notes/note/:id?' render={ props => {
             // get id from here, it may be undefined XX
             console.log(props.match.params)
+            // do we need to send keys? KeywordsSearchNewNote doesn't XX
             return (
               <div className='cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden'>
                 <KeywordsSaveGoToSearch
                   keysInputCB={(e) => this.keysInput(e)}
-                  saveButton={this.saveButton}
-                  goToSearchButton={this.goToSearchButton}
+                  saveButtonCB={(e) => this.saveButton(e)}
+                  goToSearchButtonCB={(e) => this.goToSearchButton(e)}
                   keys={state.keys}
                   edited={state.edited}
                 />

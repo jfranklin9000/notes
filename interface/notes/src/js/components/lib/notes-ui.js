@@ -3,16 +3,9 @@ import React, { Component } from 'react'
 export class KeywordsSearchNewNote extends Component {
   render() {
     const props = this.props
-    // these are good for centered display without New Note button:
-    // const divC = 'flex flex-row justify-center items-baseline f5'
-    // const spanC = 'mr3 gray3'
-    // const inputC = 'w-50 bg-gray4 black tc'
-    // const buttonC = 'ml3 ba b--green2 green2 br1 pointer'
-    // instead we will put the New Note button here:
-    // (no flex here..)
     const searchC = 'fl ml3 ba b--green2 green2 br1 pointer pt1'
     const newNoteC = 'fr ml3 ba b--green2 green2 br1 pointer pt1'
-    // change keysInput, ala KeywordsSaveGoToSearch? XX
+    // do we need/want value={props.keys}? XX (don't seem to need it)
     return (
       <div className={'f6'}>
         <span className={'fl mr3 gray3 pt1'}>
@@ -20,17 +13,17 @@ export class KeywordsSearchNewNote extends Component {
         </span>
         <input
           className={'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2'}
-          onChange={props.keysInput.bind(this)}
+          onChange={(e) => props.keysInputCB(e)}
         />
         <button
           className={searchC}
-          onClick={props.searchButton.bind(this)}
+          onClick={(e) => props.searchButtonCB(e)}
         >
           Search
         </button>
         <button
           className={newNoteC}
-          onClick={props.newNoteButton.bind(this)}
+          onClick={(e) => props.newNoteButtonCB(e)}
         >
           New Note
         </button>
@@ -163,13 +156,13 @@ export class KeywordsSaveGoToSearch extends Component {
         {/* swap button order because they're float:right */}
         <button
           className={goToSearchC}
-          onClick={props.goToSearchButton.bind(this)}
+          onClick={(e) => props.goToSearchButtonCB(e)}
         >
           Go To Search
         </button>
         <button
           className={saveC}
-          onClick={props.saveButton.bind(this)}
+          onClick={(e) => props.saveButtonCB(e)}
         >
           Save
         </button>
