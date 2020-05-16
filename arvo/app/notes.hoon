@@ -96,7 +96,7 @@
       =/  put  ((om:dejs:format same) !<(json vase))
       =/  act  (so:dejs:format (~(got by put) %action))
       ::
-      ?:  =(act 'add')
+      ?:  =(act 'add')  ::::::::::::::::  TOSS? XX
         =.  note-id  +(note-id)
         =/  =note  :+  ::  handle like search below? XX
           note-id
@@ -110,8 +110,19 @@
         `this  ::  FIXME?
       ::
       ?:  =(act 'new-note')
-        ~&  actions-new-note=put
-        `this
+        =.  note-id  +(note-id)
+        =|  =note
+        =.  note
+          %=  note
+            id    note-id
+            keys  ~
+            text  ~
+          ==
+        =.  all-notes  (snoc all-notes note)
+        =/  =json
+          (pairs:enjs:format ~[['note' (note-to-json note)]])
+        :_  this
+        [%give %fact ~[/primary] %json !>(json)]~
       ::
       ?:  =(act 'save')
         ~&  actions-save=put
