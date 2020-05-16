@@ -28,7 +28,7 @@ export class Root extends Component {
     // is this true with my new callback scheme?
     const keys = this.state ? this.state.keys : ''
     api.action('notes', 'json',
-      {action: 'search', keys: keys})  //  rename keywords
+      {action: 'search', keys: keys})
   }
 
   newNoteButton(event) {
@@ -56,11 +56,12 @@ export class Root extends Component {
     // see searchButton note about page reload
     const state = this.state
     const id = state ? state.id : 0
-    const keys = state ? state.keys : ''  //  rename keywords,
+    const keys = state ? state.keys : ''
     const text = state ? state.text : ''
     console.log('id', id, 'keys', keys, 'text', text)
-    // api.action('notes', 'json',
-    //   {action: 'save', id: 0, keys: state.keys, text: state.text})
+    // fix this for new notes XX
+    api.action('notes', 'json',
+      {action: 'save', id: id, keys: keys, text: text})
   }
 
   goToSearchButton(event) {

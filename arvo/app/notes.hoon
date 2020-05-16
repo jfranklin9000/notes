@@ -109,6 +109,14 @@
           (get-keys-not-in keys.note all-keys)
         `this  ::  FIXME?
       ::
+      ?:  =(act 'new-note')
+        ~&  actions-new-note=put
+        `this
+      ::
+      ?:  =(act 'save')
+        ~&  actions-save=put
+        `this
+      ::
       ?:  =(act 'search')
         =/  =keys
           (cord-to-keys (so:dejs:format (~(got by put) %keys)))
