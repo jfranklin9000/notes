@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { HeaderBar } from './lib/header-bar.js'
-// combine
-import { KeywordsSearchNewNote, SearchResults } from './lib/notes-ui.js'
-import { KeywordsSaveGoToSearch } from './lib/notes-ui.js'
+import { KeywordsSearchNewNote, SearchResults,
+         KeywordsSaveGoToSearch, NoteText } from './lib/notes-ui.js'
 
 export class Root extends Component {
 
@@ -45,6 +44,12 @@ export class Root extends Component {
     window.location.replace('/~notes/note')
   }
 
+  matchClick(event) {
+    const id = event.target.getAttribute('id')
+    // yeesh, probably not right, but it works
+    window.location.replace('/~notes/note/' + id)
+  }
+
   saveButton() {
     // console.log('Root saveButton()', this.state)
     // see searchButton note about page reload
@@ -54,7 +59,7 @@ export class Root extends Component {
     const text = state ? state.text : ''
     console.log('id', id, 'keys', keys, 'text', text)
     // api.action('notes', 'json',
-    // {action: 'save', id: 0, keys: state.keys, text: state.text})
+    //   {action: 'save', id: 0, keys: state.keys, text: state.text})
   }
 
   goToSearchButton() {
@@ -65,7 +70,7 @@ export class Root extends Component {
   }
 
   textTextArea(event) {
-    console.log('Root textTextArea()', event.target.value)
+    // console.log('Root textTextArea()', event.target.value)
     this.setState({text: event.target.value, edited: true})
   }
 
@@ -86,6 +91,7 @@ export class Root extends Component {
                   newNoteButton={this.newNoteButton}
                 />
                 <SearchResults
+                  matchClickCB={(e) => this.matchClick(e)}
                   search={state.search}
                 />
               </div>
@@ -103,13 +109,10 @@ export class Root extends Component {
                   keys={state.keys}
                   edited={state.edited}
                 />
-                <textarea
-                  className='pa2 pre f7 mt3 ba b--gray4 lh-copy overflow-auto'
-                  style={{flexBasis: '100%', resize: 'none'}}
-                  value={state.text}
-                  onChange={this.textTextArea.bind(this)}
-                >
-                </textarea>
+                <NoteText
+                  textTextAreaCB={(e) => this.textTextArea(e)}
+                  text={state.text}
+                />
               </div>
             )}}
           />

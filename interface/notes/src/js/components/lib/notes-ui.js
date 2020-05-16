@@ -18,15 +18,18 @@ export class KeywordsSearchNewNote extends Component {
         <span className={'fl mr3 gray3 pt1'}>
           Keywords
         </span>
-        <input className={'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2'}
+        <input
+          className={'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2'}
           onChange={props.keysInput.bind(this)}
         />
-        <button className={searchC}
+        <button
+          className={searchC}
           onClick={props.searchButton.bind(this)}
         >
           Search
         </button>
-        <button className={newNoteC}
+        <button
+          className={newNoteC}
           onClick={props.newNoteButton.bind(this)}
         >
           New Note
@@ -61,19 +64,14 @@ class KeysNotIn extends Component {
   }
 }
 
-// move into formatKeys XX
-function keyMatch(key, keys)
-{
-  // what about keys==null? XX
-  return keys.some((k) => {return k == key})
-}
-
 function formatKeys(keysIn, keys)
 {
-  // check keys for null XX (need actual note with no keywords to test this)
+  // check keys for null XX
+  // (need actual note with no keywords to test this)
   // (or could just hack to return no keys)
   const ks = keys.map((key, n) => {
-    const color = keyMatch(key, keysIn) ? 'green2' : 'gray3'
+    const color =
+      keysIn.some((k) => {return k == key}) ? 'green2' : 'gray3'
     return (
       <span key={n} className={'ml1 mr1 ' + color}>
         {key}
@@ -85,18 +83,12 @@ function formatKeys(keysIn, keys)
   )
 }
 
-// move to root.js XX
-function noteClick(event) {
-  const id = event.target.getAttribute('id')
-  // yeesh, probably not right, but it works
-  window.location.replace('/~notes/note/' + id)
-}
-
 // export
 class Matches extends Component {
   render() {
-    const matches = this.props.matches
-    const keysIn = this.props.keysIn
+    const props = this.props
+    const matches = props.matches
+    const keysIn = props.keysIn
     if (matches == null || matches.length == 0)
       return (
         <p className={'f7 gray3 tc mt7 i'}>
@@ -108,9 +100,10 @@ class Matches extends Component {
         return (
           <div key={n}>
             {formatKeys(keysIn, note.keys)}
-            <p id={note.id}
+            <p
               className={'f7 bt b--gray4 mt2 pt2 pointer'}
-              onClick={noteClick.bind(this)}
+              onClick={(e) => props.matchClickCB(e)}
+              id={note.id}
             >
               {note.text}
             </p>
@@ -129,11 +122,16 @@ class Matches extends Component {
 
 export class SearchResults extends Component {
   render() {
-    const search = this.props.search
+    const props = this.props
+    const search = props.search
     return (
       <div>
         <KeysNotIn keysNi={search.keysNi} />
-        <Matches matches={search.matches} keysIn={search.keysIn} />
+        <Matches
+          matchClickCB={props.matchClickCB}
+          matches={search.matches}
+          keysIn={search.keysIn}
+        />
       </div>
     )
   }
@@ -157,22 +155,43 @@ export class KeywordsSaveGoToSearch extends Component {
         <span className={'fl mr3 gray3 pt1'}>
           Keywords
         </span>
-        <input className={'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2'}
-          value={props.keys}
+        <input
+          className={'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2'}
           onChange={(e) => props.keysInputCB(e)}
+          value={props.keys}
         />
         {/* swap button order because they're float:right */}
-        <button className={goToSearchC}
+        <button
+          className={goToSearchC}
           onClick={props.goToSearchButton.bind(this)}
         >
           Go To Search
         </button>
-        <button className={saveC}
+        <button
+          className={saveC}
           onClick={props.saveButton.bind(this)}
         >
           Save
         </button>
       </div>
+    )
+  }
+}
+
+export class NoteText extends Component {
+  render() {
+    const props = this.props
+    // do we need/want value={props.text}? XX
+    return (
+      <textarea
+        className={
+          'pa2 pre f7 mt3 ba b--gray4 lh-copy ' +
+          'overflow-auto flex-basis-100 resize-none'
+        }
+        onChange={(e) => props.textTextAreaCB(e)}
+        value={props.text}
+      >
+      </textarea>
     )
   }
 }

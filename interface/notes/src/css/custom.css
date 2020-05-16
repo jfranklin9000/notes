@@ -73,6 +73,14 @@ textarea, select, input, button {
   pointer-events: none;
 }
 
+.flex-basis-100 {
+  flex-basis: 100%;
+}
+
+.resize-none {
+  resize: none;
+}
+
 /* dark */
 
 @media (prefers-color-scheme: dark) {
