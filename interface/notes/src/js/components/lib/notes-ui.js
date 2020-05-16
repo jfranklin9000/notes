@@ -59,10 +59,9 @@ class KeysNotIn extends Component {
 
 function formatKeys(keysIn, keys)
 {
-  // check keys for null XX
-  // (need actual note with no keywords to test this)
-  // (or could just hack to return no keys)
-  const ks = keys.map((key, n) => {
+  keysIn = keysIn || []
+  keys = keys || []
+  let ks = keys.map((key, n) => {
     const color =
       keysIn.some((k) => {return k == key}) ? 'green2' : 'gray3'
     return (
@@ -71,6 +70,8 @@ function formatKeys(keysIn, keys)
       </span>
     )
   })
+  if (ks.length == 0)
+    ks = <span className={'gray3 i'}>no keywords</span>
   return (
     <div className={'f7 bt b--gray2 mt2 pt2 tc'}>{ks}</div>
   )
@@ -90,15 +91,21 @@ class Matches extends Component {
       )
     const ms = matches.map((match, n) => {
       let notes = match.notes.map((note, n) => {
+        let text = note.text
+        let pC = 'f7 bt b--gray4 mt2 pt2 pointer'
+        if (text == '') {
+          text = 'no text'
+          pC += ' i tc'
+        }
         return (
           <div key={n}>
             {formatKeys(keysIn, note.keys)}
             <p
-              className={'f7 bt b--gray4 mt2 pt2 pointer'}
+              className={pC}
               onClick={(e) => props.matchClickCB(e)}
               id={note.id}
             >
-              {note.text}
+              {text}
             </p>
           </div>
         )
