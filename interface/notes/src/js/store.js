@@ -6,8 +6,10 @@ class Store {
     constructor() {
         // console.log('Store constructor()');
         this.state = {
+            id: 0,
             keys: '',
             text: '',
+            edited: false,
             search: {
               keysIn: [],
               keysNi: [],
@@ -29,7 +31,7 @@ class Store {
     handleEvent(data) {
         // console.log('Store handleEvent()', data);
         let json = data.data;
-        console.log(json);
+        console.log('json', json);
 
         // this.initialReducer.reduce(json, this.state);
         // this.configReducer.reduce(json, this.state);

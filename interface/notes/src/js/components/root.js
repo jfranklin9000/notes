@@ -1,79 +1,77 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import React, { Component } from 'react'
+import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { HeaderBar } from './lib/header-bar.js'
+// combine
 import { KeywordsSearchNewNote, SearchResults } from './lib/notes-ui.js'
 import { KeywordsSaveGoToSearch } from './lib/notes-ui.js'
 
 export class Root extends Component {
 
   constructor(props) {
-    // console.log('Root constructor()', props);
-    super(props);
-    this.state = store.state;
-    store.setStateHandler(this.setState.bind(this));
+    // console.log('Root constructor()', props)
+    super(props)
+    this.state = store.state
+    store.setStateHandler(this.setState.bind(this))
   }
 
   keysInput(event) {
-    // console.log('Root keysInput()', event.target.value);
-    this.setState({keys: event.target.value});
+    // console.log('Root keysInput()', event.target.value)
+    // don't want to set edited if on search page? XX
+    this.setState({keys: event.target.value, edited: true})
   }
 
   searchButton() {
-    // console.log('Root searchButton()', this.state);
+    // console.log('Root searchButton()', this.state)
     // on page reload this.state is null (not sure why), so
     // if you immediately click the Search button you get:
     // Uncaught TypeError: Cannot read property 'keys' of null
     // do something reasonable until i figure it out: XX
-    let keys = this.state === null ? '' : this.state.keys;
+    const keys = this.state ? this.state.keys : ''
     api.action('notes', 'json',
-      {action: 'search', keys: keys});
+      {action: 'search', keys: keys})  //  rename keywords
   }
 
   newNoteButton() {
-    // console.log('Root newNoteButton()', this.state);
+    // console.log('Root newNoteButton()', this.state)
     api.action('notes', 'json',
-      {action: 'new-note'});
+      {action: 'new-note'})
 
-// need a redirect here.. /~notes/note/42 (but we don't know 42..)
+    // need a redirect here.. /~notes/note/42
+    // (but we don't know 42..) XX
     // need a redirect to /~notes/note
     // could not get this to work XX
-    // return <Redirect to='/~notes/note' />;
+    // return <Redirect to='/~notes/note' />
     // yeesh, probably not right, but it works
-    window.location.replace('/~notes/note');
+    window.location.replace('/~notes/note')
   }
 
   saveButton() {
-    // console.log('Root saveButton()', this.state);
+    // console.log('Root saveButton()', this.state)
+    // see searchButton note about page reload
+    const state = this.state
+    const id = state ? state.id : 0
+    const keys = state ? state.keys : ''  //  rename keywords,
+    const text = state ? state.text : ''
+    console.log('id', id, 'keys', keys, 'text', text)
+    // api.action('notes', 'json',
+    // {action: 'save', id: 0, keys: state.keys, text: state.text})
   }
 
   goToSearchButton() {
-    // console.log('Root goToSearchButton()', this.state);
-
+    // console.log('Root goToSearchButton()', this.state)
     // what about if note edited? XX
     // yeesh, probably not right, but it works
-    window.location.replace('/~notes');
+    window.location.replace('/~notes')
   }
 
-  textTextArea() {
-    // console.log('Root textTextArea()', event.target.value);
-    this.setState({text: event.target.value});
-  }
-
-  addButton() {
-    // console.log('Root addButton()', this.state);
-    api.action('notes', 'json',
-      {action: 'add', id: 0, keys: this.state.keys, text: this.state.text});
-
-    // need a redirect to /~notes/edit (/~notes for now)
-    // could not get this to work XX
-    // return <Redirect to='/~notes' />;
-    // yeesh, probably not right, but it works
-    window.location.replace('/~notes');
+  textTextArea(event) {
+    console.log('Root textTextArea()', event.target.value)
+    this.setState({text: event.target.value, edited: true})
   }
 
   render() {
-    const state = this.state;
-    console.log('Root render()', state);
+    const state = this.state
+    console.log('Root render()', state)
 
     return (
       <BrowserRouter>
@@ -93,61 +91,25 @@ export class Root extends Component {
               </div>
             )}}
           />
-
           <Route exact path='/~notes/note/:id?' render={ props => {
-console.log(props.match.params); // get id from here, it may be undefined
-
+            // get id from here, it may be undefined XX
+            console.log(props.match.params)
             return (
               <div className='cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden'>
                 <KeywordsSaveGoToSearch
-                  keysInput={this.keysInput}
+                  keysInputCB={(e) => this.keysInput(e)}
                   saveButton={this.saveButton}
                   goToSearchButton={this.goToSearchButton}
+                  keys={state.keys}
+                  edited={state.edited}
                 />
-
-                {/* do we want to set value here? */}
                 <textarea
-                  className='pa2 pre f6 mt3 ba b--gray4 lh-copy overflow-auto'
+                  className='pa2 pre f7 mt3 ba b--gray4 lh-copy overflow-auto'
                   style={{flexBasis: '100%', resize: 'none'}}
                   value={state.text}
                   onChange={this.textTextArea.bind(this)}
                 >
                 </textarea>
-
-              </div>
-            )}}
-          />
-
-          <Route exact path='/~notes/add' render={ () => {
-            return (
-              <div className='cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden'>
-
-                <p style={{fontSize: 1.0 + 'rem', color: 'lightgray'}}>
-                  Add a note
-                </p>
-
-                {/* do we want to set value here? */}
-                <input style={{ background: 'lightgray',
-                                fontSize: 1.5 + 'rem',
-                                marginTop: 0.5 + 'rem' }}
-                       value={ state.keys }
-                       onChange={ this.keysInput.bind(this) }
-                />
-
-                {/* do we want to set value here? */}
-                <textarea className='br pa2 pre'
-                          style={{ flexBasis: '50%', resize: 'none' }}
-                          value={ state.text }
-                          onChange={ this.textTextArea.bind(this) }
-                >
-                </textarea>
-
-                <button className='mt3 fr f4'
-                        style={{ color: 'lightgray', cursor: 'pointer' }}
-                        onClick={ this.addButton.bind(this) }>
-                  Add
-                </button>
-
               </div>
             )}}
           />
