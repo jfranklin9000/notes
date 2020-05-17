@@ -96,28 +96,16 @@
       =/  put  ((om:dejs:format same) !<(json vase))
       =/  act  (so:dejs:format (~(got by put) %action))
       ::
-      ?:  =(act 'add')  ::::::::::::::::  TOSS? XX
-        =.  note-id  +(note-id)
-        =/  =note  :+  ::  handle like search below? XX
-          note-id
-          %-  cord-to-keys
-            (so:dejs:format (~(got by put) %keys))
-          %-  trip
-            (so:dejs:format (~(got by put) %text))
-        =.  all-notes  (snoc all-notes note)
-        =.  all-keys  %+  weld  all-keys
-          (get-keys-not-in keys.note all-keys)
-        `this  ::  FIXME?
-      ::
       ?:  =(act 'new-note')
         =.  note-id  +(note-id)
-        =|  =note
-        =.  note
-          %=  note
-            id    note-id
-            keys  ~
-            text  ~
-          ==
+::        =|  =note
+::        =.  note
+::          %=  note
+::            id    note-id
+::            keys  ~
+::            text  ~
+::          ==
+        =/  =note  [note-id ~ ~]
         =.  all-notes  (snoc all-notes note)
         =/  =json
           (pairs:enjs:format ~[['note' (note-to-json note)]])
@@ -149,18 +137,13 @@
           (cord-to-keys (so:dejs:format (~(got by put) %keys)))
         =/  text=tape
           (trip (so:dejs:format (~(got by put) %text)))
-        =|  =note
-        =.  note
-          %=  note
-            id    id
-            keys  keys
-            text  text
-          ==
+        =/  =note  [id keys text]
         =.  all-notes  (snap all-notes u.dux note)
         ::  this could be done better.. XX
         =.  all-keys  (get-keys-all all-notes)
+        ::  send note back to trigger re-render XX
         =/  =json
-          (pairs:enjs:format ~[['edited' b+|]])  ::  ??? XX, not good enough?
+          (pairs:enjs:format ~[['note' (note-to-json note)]])
         :_  this
         [%give %fact ~[/primary] %json !>(json)]~
       ::

@@ -208,21 +208,17 @@
   ^-  search
   =/  keys-ini=[^keys ^keys]
     (get-keys-in-not-in keys all)
-  =|  =search
-  =.  search
-    %=  search
-      keys     keys
-      keys-in  -.keys-ini
-      keys-ni  +.keys-ini
-      matches  ?~  keys
-                 (get-matches-no-keys notes)
-               ::  optimization:
-               ::  use -.keys-ini instead of keys
-               ::  note: all-keys and all-notes (in
-               ::        state) must be consistent
-               (get-matches -.keys-ini notes)
-    ==
-  search
+  :*  keys
+      -.keys-ini
+      +.keys-ini
+      ?~  keys
+        (get-matches-no-keys notes)
+      ::  optimization:
+      ::  use -.keys-ini instead of keys
+      ::  note: all-keys and all-notes
+      ::        must be consistent
+      (get-matches -.keys-ini notes)
+  ==
 ::
 ::  json encoding
 ::
