@@ -3,16 +3,16 @@ import React, { Component } from 'react'
 export class KeywordsSearchNewNote extends Component {
   render() {
     const props = this.props
-    const searchC = 'fl ml3 ba b--green2 green2 br1 pointer pt1'
-    const newNoteC = 'fr ml3 ba b--green2 green2 br1 pointer pt1'
+    const searchC = 'fl ml3 ba b--green2 green2 br1 pointer search-pad'
+    const newNoteC = 'fr ml3 ba b--green2 green2 br1 pointer search-pad'
     // do we need/want value={props.keys}? XX (don't seem to need it)
     return (
       <div className={'f6'}>
-        <span className={'fl mr3 gray3 pt1'}>
+        <span className={'fl mr1 ba b--white gray3 search-pad'}>
           Keywords
         </span>
         <input
-          className={'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2'}
+          className={'fl w-50 ba b--gray3 br1 black search-pad pl2 pr2'}
           onChange={(e) => props.keysInputCB(e)}
         />
         <button
@@ -50,7 +50,7 @@ class KeysNotIn extends Component {
     })
     return (
       <div className={'mt3'}>
-        <p className={'f8 tc'}>{message}</p>
+        <p className={'f8 tc mb1'}>{message}</p>
         <div className={'mb3 tc'}>{ks}</div>
       </div>
     )
@@ -143,8 +143,8 @@ export class SearchResults extends Component {
 export class KeywordsSaveGoToSearch extends Component {
   render() {
     const props = this.props
-    let saveC = 'fr ml3 ba br1 pt1'
-    let goToSearchC = 'fr ml3 ba br1 pointer pt1'
+    let saveC = 'fr ml3 ba br1 search-pad'
+    let goToSearchC = 'fr ml3 ba br1 pointer search-pad'
     if (props.edited) {
       saveC += ' b-red2 red2 pointer'
       goToSearchC += ' b-yellow2 yellow2'
@@ -155,11 +155,11 @@ export class KeywordsSaveGoToSearch extends Component {
     // do we need/want value={props.keys}? XX
     return (
       <div className={'f6'}>
-        <span className={'fl mr3 gray3 pt1'}>
+        <span className={'fl mr1 ba b--white gray3 search-pad'}>
           Keywords
         </span>
         <input
-          className={'fl w-50 bg-gray4 black pt1 pb1 pl2 pr2'}
+          className={'fl w-50 ba b--gray3 br1 black search-pad pl2 pr2'}
           onChange={(e) => props.keysInputCB(e)}
           value={props.keys}
         />
