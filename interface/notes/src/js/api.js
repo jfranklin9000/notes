@@ -1,19 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import _ from 'lodash';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import _ from 'lodash'
 
 class UrbitApi {
   setAuthTokens(authTokens) {
-    this.authTokens = authTokens;
-    this.bindPaths = [];
+    this.authTokens = authTokens
+    this.bindPaths = []
   }
 
-  bind(path, method, ship = this.authTokens.ship, appl = "notes", success, fail) {
-    this.bindPaths = _.uniq([...this.bindPaths, path]);
+  bind(path, method, ship = this.authTokens.ship, appl = 'notes', success, fail) {
+    this.bindPaths = _.uniq([...this.bindPaths, path])
 
     window.subscriptionId = window.urb.subscribe(ship, appl, path, 
       (err) => {
-        fail(err);
+        fail(err)
       },
       (event) => {
         success({
@@ -22,28 +22,29 @@ class UrbitApi {
             ship,
             path
           }
-        });
+        })
       },
       (err) => {
-        fail(err);
-      });
+        fail(err)
+      })
   }
 
   notes(data) {
-    this.action("notes", "json", data);
+    this.action('notes', 'json', data)
   }
 
   action(appl, mark, data) {
     return new Promise((resolve, reject) => {
       window.urb.poke(ship, appl, mark, data,
         (json) => {
-          resolve(json);
+          resolve(json)
         }, 
         (err) => {
-          reject(err);
-        });
-    });
+          reject(err)
+        })
+    })
   }
 }
-export let api = new UrbitApi();
-window.api = api;
+
+export let api = new UrbitApi()
+window.api = api

@@ -4,13 +4,12 @@
 
 class Store {
   constructor() {
-    // console.log('Store constructor()')
     this.state = {
-      // collapse into note, including edited? XX
       id: 0,
       keys: '',
       text: '',
       edited: false,
+      //
       search: {
         keysIn: [],
         keysNi: [],
@@ -25,12 +24,10 @@ class Store {
   }
 
   setStateHandler(setState) {
-    // console.log('Store setStateHandler()', setState)
     this.setState = setState
   }
 
   handleEvent(data) {
-    // console.log('Store handleEvent()', data)
     let state = this.state
     const json = data.data
     console.log('json', json)
@@ -45,7 +42,7 @@ class Store {
     if (json.note !== undefined) {
       const note = json.note
       state.id = note.id
-      state.keys = note.keys.join(' ') // do this in hoon? XX
+      state.keys = note.keys.join(' ')
       state.text = note.text
     }
 
