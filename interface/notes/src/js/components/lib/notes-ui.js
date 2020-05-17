@@ -95,7 +95,7 @@ class Matches extends Component {
     const ms = matches.map((match, n) => {
       let notes = match.notes.map((note, n) => {
         let text = note.text
-        let pC = 'f7 bt b--gray4 mt2 pt2 pointer'
+        let pC = 'f7 bt b--gray4 mt2 pt2 pointer mono ws-pre'
         if (text == '') {
           text = 'no text'
           pC += ' i tc'
@@ -188,7 +188,7 @@ export class NoteText extends Component {
     return (
       <textarea
         className={
-          'pa2 pre f7 mt3 ba b--gray4 lh-copy ' +
+          'pa2 pre mono f7 mt3 ba b--gray4 lh-copy ' +
           'overflow-auto flex-basis-100 resize-none'
         }
         onChange={(e) => props.textTextAreaCB(e)}
