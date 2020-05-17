@@ -7,44 +7,36 @@ import { KeywordsSearchNewNote, SearchResults,
 export class Root extends Component {
 
   constructor(props) {
-    // console.log('Root constructor()', props)
     super(props)
     this.state = store.state
     store.setStateHandler(this.setState.bind(this))
   }
 
   keysInput(event) {
-    // console.log('Root keysInput()', event.target.value)
     // don't want to set edited if on search page? XX
     this.setState({keys: event.target.value, edited: true})
   }
 
   searchButton(event) {
-    // console.log('Root searchButton()', this.state)
     // on page reload this.state is null (not sure why), so
     // if you immediately click the Search button you get:
     // Uncaught TypeError: Cannot read property 'keys' of null
     // do something reasonable until i figure it out: XX
-    // is this true with my new callback scheme?
+    // is this true with my new callback scheme? XX
     const keys = this.state ? this.state.keys : ''
-    api.action('notes', 'json',
-      {action: 'search', keys: keys})
+    api.action('notes', 'json', {action: 'search', keys: keys})
   }
 
   newNoteButton(event) {
-    // console.log('Root newNoteButton()', this.state)
-    api.action('notes', 'json',
-      {action: 'new-note'})
+    api.action('notes', 'json', {action: 'new-note'})
   }
 
   matchClick(event) {
-    const id = event.target.getAttribute('id')
-    // yeesh, probably not right, but it works
-    window.location.replace('/~notes/note/' + id)
+    const id = parseInt(event.target.getAttribute('id'))
+    api.action('notes', 'json', {action: 'get-note', id: id})
   }
 
   saveButton(event) {
-    // console.log('Root saveButton()', this.state)
     // see searchButton note about page reload
     const state = this.state
     const id = state ? state.id : 0
@@ -64,7 +56,6 @@ export class Root extends Component {
   }
 
   textTextArea(event) {
-    // console.log('Root textTextArea()', event.target.value)
     this.setState({text: event.target.value, edited: true})
   }
 

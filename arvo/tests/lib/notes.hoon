@@ -510,6 +510,9 @@
     ::
     ==
 ::
+::  ++test-get-note-index-from-id  XX
+::  ++test-get-note-from-id        XX
+::
 ::  ++test-get-search       XX
 ::
 ::  ++test-cord-to-keys     XX

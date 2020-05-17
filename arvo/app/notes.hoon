@@ -124,9 +124,45 @@
         :_  this
         [%give %fact ~[/primary] %json !>(json)]~
       ::
+      ?:  =(act 'get-note')
+        =/  id=@ud
+          (ni:dejs:format (~(got by put) %id))
+        =/  nute=(unit note)
+          (get-note-from-id id all-notes)
+        ?~  nute
+          ~&  >>  [%notes %get-note-from-id id=id]
+          `this
+        =/  =json
+          (pairs:enjs:format ~[['note' (note-to-json u.nute)]])
+        :_  this
+        [%give %fact ~[/primary] %json !>(json)]~
+      ::
       ?:  =(act 'save')
-        ~&  actions-save=put
-        `this
+        =/  id=@ud
+          (ni:dejs:format (~(got by put) %id))
+        =/  dux=(unit @ud)
+          (get-note-index-from-id id all-notes)
+        ?~  dux
+          ~&  >>  [%notes %get-note-index-from-id id=id]
+          `this
+        =/  =keys
+          (cord-to-keys (so:dejs:format (~(got by put) %keys)))
+        =/  text=tape
+          (trip (so:dejs:format (~(got by put) %text)))
+        =|  =note
+        =.  note
+          %=  note
+            id    id
+            keys  keys
+            text  text
+          ==
+        =.  all-notes  (snap all-notes u.dux note)
+        ::  this could be done better.. XX
+        =.  all-keys  (get-keys-all all-notes)
+        =/  =json
+          (pairs:enjs:format ~[['edited' b+|]])  ::  ??? XX, not good enough?
+        :_  this
+        [%give %fact ~[/primary] %json !>(json)]~
       ::
       ?:  =(act 'search')
         =/  =keys
@@ -136,7 +172,7 @@
         :_  this
         [%give %fact ~[/primary] %json !>(json)]~
       ::
-      ~&  >>  [%notes-unknown-action act]
+      ~&  >>  [%notes %unknown-action action=act]
       `this
     ::
     ::  dojo commands

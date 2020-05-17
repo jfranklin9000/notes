@@ -87,6 +87,27 @@
   ^-  [^notes ^notes]
   (skid notes |=(=note (key-match-all keys keys.note)))
 ::
+::  +get-note-index-from-id: XX
+::
+++  get-note-index-from-id
+  |=  [id=@ud =notes]
+  ^-  (unit @ud)
+  =|  dex=@ud
+  |-
+    ?~  notes  ~
+    ?:  =(id id.i.notes)  `dex
+  $(dex +(dex), notes t.notes)
+::
+::  +get-note-from-id: XX
+::
+++  get-note-from-id
+  |=  [id=@ud =notes]
+  ^-  (unit note)
+  =/  dux=(unit @ud)
+    (get-note-index-from-id id notes)
+  ?~  dux  ~
+  `(snag u.dux notes)
+::
 ::  +get-key-combos-n: get combos of n from keys
 ::
 ++  get-key-combos-n
@@ -177,7 +198,7 @@
   ?~  nok  ~
   ~[[~ nok]]
 ::
-::  +get-search: XX add to test suite
+::  +get-search: XX
 ::
 ::    add note about all=keys
 ::    (it's for the ui)
@@ -225,7 +246,7 @@
       $(tape t.tape, key (snoc key i.tape))
     ?~  key
       $(tape t.tape)
-    $(tape t.tape, key ~, keys (snoc keys (crip key)))
+  $(tape t.tape, key ~, keys (snoc keys (crip key)))
 ::
 ::  +keys-to-cord: XX
 ::

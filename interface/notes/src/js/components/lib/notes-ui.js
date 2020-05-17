@@ -84,7 +84,7 @@ class Matches extends Component {
     const matches = props.matches
     const keysIn = props.keysIn
     // combine with below XX
-    // factor out <p> classNames
+    // factor out <p> classNames XX
     if (matches == null || matches.length == 0) {
       return (
         <p className={'f7 bt b--gray2 gray3 tc mt2 pt2 i'}>
