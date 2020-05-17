@@ -81,7 +81,7 @@
     ?>  (team:title our.bowl src.bowl)
     ?+    mark  (on-poke:def mark vase)
     ::
-    ::  XX file server?
+    ::  file server
     ::
         %handle-http-request
       =+  !<([eyre-id=@ta =inbound-request:eyre] vase)
@@ -98,13 +98,6 @@
       ::
       ?:  =(act 'new-note')
         =.  note-id  +(note-id)
-::        =|  =note
-::        =.  note
-::          %=  note
-::            id    note-id
-::            keys  ~
-::            text  ~
-::          ==
         =/  =note  [note-id ~ ~]
         =.  all-notes  (snoc all-notes note)
         =/  =json
@@ -134,6 +127,7 @@
           ~&  >>  [%notes %get-note-index-from-id id=id]
           `this
         =/  =keys
+          %-  dedup-keys
           (cord-to-keys (so:dejs:format (~(got by put) %keys)))
         =/  text=tape
           (trip (so:dejs:format (~(got by put) %text)))
@@ -149,6 +143,7 @@
       ::
       ?:  =(act 'search')
         =/  =keys
+          %-  dedup-keys
           (cord-to-keys (so:dejs:format (~(got by put) %keys)))
         =/  =search  (get-search keys all-keys all-notes)
         =/  =json  (search-to-json search)
@@ -166,7 +161,8 @@
       ::
           %add
         =.  note-id  +(note-id)
-        =.  id.note.com  note-id  ::  overwrite
+        =.  id.note.com  note-id
+        =.  keys.note.com  (dedup-keys keys.note.com)
         =.  all-notes  (snoc all-notes note.com)
         =.  all-keys  %+  weld  all-keys
           (get-keys-not-in keys.note.com all-keys)

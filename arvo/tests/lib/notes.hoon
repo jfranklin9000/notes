@@ -27,6 +27,7 @@
 ++  k-def   ~[%d %e %f]
 ++  k-abcd  ~[%a %b %c %d]
 ++  k-abef  ~[%a %b %e %f]
+++  k-dups  ~[%a %a %b %a %b %c %d %a]
 ::
 ++  test-key-match
   ::
@@ -102,6 +103,24 @@
     %+  expect-eq
       !>  %.n
       !>  (key-match-all ~ k-abc)
+  ==
+::
+++  test-dedup-keys
+  ::
+  ::  XX
+  ::
+  ;:  weld
+    %+  expect-eq
+      !>  ~
+      !>  (dedup-keys ~)
+  ::
+    %+  expect-eq
+      !>  k-abcd
+      !>  (dedup-keys k-abcd)
+  ::
+    %+  expect-eq
+      !>  k-abcd
+      !>  (dedup-keys k-dups)
   ==
 ::
 ++  test-get-keys-in

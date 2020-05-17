@@ -28,6 +28,15 @@
   ?~  a  |
   (levy `keys`a |=(=key (key-match key b)))
 ::
+::  +dedup-keys: XX
+::
+++  dedup-keys
+  |=  =keys
+  ^-  ^keys
+  %+  roll  keys
+  =|  [=key dedup=^keys]
+  |.  ?:((key-match key dedup) dedup (snoc dedup key))
+::
 ::  +get-keys-in: get keys in a that are in b
 ::
 ++  get-keys-in
