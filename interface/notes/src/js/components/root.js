@@ -40,8 +40,8 @@ export class Root extends Component {
 
   goToSearchButton(event) {
     // what about if note edited? XX
-    // yeesh, probably not right, but it works
-    window.location.replace('/~notes') // XX
+    const keys = this.state.keys
+    api.action('notes', 'json', {action: 'search', keys: keys})
   }
 
   textTextArea(event) {
@@ -58,7 +58,8 @@ export class Root extends Component {
           <HeaderBar/>
           <Route exact path='/~notes' render={() => {
             // what about setting the url manually? XX
-            if (state.id) {
+            if (state.id != 0) {
+// console.log('ID:', state.id, 'redirecting to /~notes/note/' + state.id)
               // user clicked New Note button
               // or clicked on Search result
               return (
@@ -81,6 +82,13 @@ export class Root extends Component {
             )}}
           />
           <Route exact path='/~notes/note/:id' render={() => {
+            if (state.id == 0) {
+// console.log('ID:', state.id, 'redirecting to /~notes')
+              // user clicked Go To Search button
+              return (
+                <Redirect to={'/~notes'} />
+              )
+            }
             return (
               <div className='cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden'>
                 <KeywordsSaveGoToSearch

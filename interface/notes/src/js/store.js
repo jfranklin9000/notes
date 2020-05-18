@@ -40,6 +40,7 @@ class Store {
       const search = json.search
       state.search = search
       state.keys = search.keys.join(' ')
+      state.id = 0
     }
 
     if (json.note !== undefined) {
@@ -48,10 +49,6 @@ class Store {
       state.keys = note.keys.join(' ')
       state.text = note.text
     }
-
-    // do we need this? XX
-    if (json.edited !== undefined)
-      state.edited = json.edited
 
     this.setState(state)
   }
