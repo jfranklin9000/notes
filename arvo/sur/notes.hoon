@@ -4,7 +4,7 @@
 +$  key      term
 +$  keys     (list key)
 ::
-+$  note     [id=@ud =keys text=tape]
++$  note     [id=@ud =keys text=tape]  ::  cord?
 +$  notes    (list note)
 ::
 +$  combo    keys
@@ -58,7 +58,7 @@
       ::  used for +snag because of note deletions (and
       ::  note re-ordering, if that ever exists)
       note-id=@ud
-      ::  XX comment about invariant
+      ::  XX comment about being consistent
       all-notes=notes
       all-keys=keys
   ==

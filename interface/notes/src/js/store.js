@@ -5,20 +5,21 @@
 class Store {
   constructor() {
     this.state = {
+      // id: =0 - search page, >0 - note page
+      id: 0,
       // search page
       search: {
-        // id: 0, // ?
-        kews: '',
+        keys: '',
         keysIn: [],
         keysNi: [],
         matches: []
       },
       // note page
-      id: 0,
-      keys: '',
-      text: '',
-      edited: false
-      //
+      note: {
+        keys: '',
+        text: '',
+        edited: false
+      }
     }
 
     // this.initialReducer = new InitialReducer()
@@ -42,16 +43,17 @@ class Store {
 
     if (json.search !== undefined) {
       const search = json.search
-      state.search = search
-      state.keys = search.keys.join(' ')
       state.id = 0
+      state.search = search
+      state.search.keys = search.keys.join(' ')
     }
 
     if (json.note !== undefined) {
       const note = json.note
       state.id = note.id
-      state.keys = note.keys.join(' ')
-      state.text = note.text
+      state.note.keys = note.keys.join(' ')
+      state.note.text = note.text
+      state.note.edited = false
     }
 
     this.setState(state)

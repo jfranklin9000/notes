@@ -135,7 +135,7 @@
         =.  all-notes  (snap all-notes u.dux note)
         ::  this could be done better.. XX
         =.  all-keys  (get-keys-all all-notes)
-        ::  send note back to trigger re-render XX
+        ::  send note back to trigger re-render
         =/  =json
           (pairs:enjs:format ~[['note' (note-to-json note)]])
         :_  this
@@ -187,7 +187,7 @@
       `this
     ?.  =(/primary path)
       (on-watch:def path)
-    `this  ::  FIXME
+    `this  ::  XX
   ::
   ++  on-arvo
     ~&  >  %notes-on-arvo

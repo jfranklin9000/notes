@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import { HeaderBar } from './lib/header-bar.js'
 import { KeywordsSearchNewNote, SearchResults,
          KeywordsSaveGoToSearch, NoteText } from './lib/notes-ui.js'
@@ -14,15 +14,14 @@ export class Root extends Component {
 
   // search page
 
-  // not used yet XX
   searchKeysInput(event) {
     let state = this.state
-    state.search.kews = event.target.value
+    state.search.keys = event.target.value
     this.setState(state)
   }
 
   searchButton(event) {
-    const keys = this.state.keys
+    const keys = this.state.search.keys
     api.action('notes', 'json', {action: 'search', keys: keys})
   }
 
@@ -36,32 +35,44 @@ export class Root extends Component {
 
   // note page
 
-  keysInput(event) {
-    this.setState({keys: event.target.value, edited: true})
+  noteKeysInput(event) {
+    let state = this.state
+    state.note.keys = event.target.value
+    state.note.edited = true
+    this.setState(state)
   }
 
   saveButton(event) {
     const state = this.state
     const id = state.id
-    const keys = state.keys
-    const text = state.text
+    const keys = state.note.keys
+    const text = state.note.text
     api.action('notes', 'json',
       {action: 'save', id: id, keys: keys, text: text})
   }
 
   goToSearchButton(event) {
-    // what about if note edited? XX
-    const keys = this.state.keys
+    const state = this.state
+    let keys = state.note.keys
+    if (state.note.edited) {
+      if (confirm('Your edits will be lost.  Are you sure?'))
+        keys = state.search.keys
+      else
+        return
+    }
     api.action('notes', 'json', {action: 'search', keys: keys})
   }
 
   textTextArea(event) {
-    this.setState({text: event.target.value, edited: true})
+    let state = this.state
+    state.note.text = event.target.value
+    state.note.edited = true
+    this.setState(state)
   }
 
   render() {
     const state = this.state
-    // console.log('Root render()', state)
+    console.log('Root render()', state)
 
     return (
       <BrowserRouter>
@@ -76,10 +87,10 @@ export class Root extends Component {
               return (
                 <div className={containerC}>
                   <KeywordsSearchNewNote
-                    keysInputCB={(e) => this.keysInput(e)}
+                    keysInputCB={(e) => this.searchKeysInput(e)}
                     searchButtonCB={(e) => this.searchButton(e)}
                     newNoteButtonCB={(e) => this.newNoteButton(e)}
-                    keys={state.keys}
+                    keys={state.search.keys}
                   />
                   <SearchResults
                     matchClickCB={(e, id) => this.matchClick(e, id)}
@@ -92,15 +103,15 @@ export class Root extends Component {
               return (
                 <div className={containerC}>
                   <KeywordsSaveGoToSearch
-                    keysInputCB={(e) => this.keysInput(e)}
+                    keysInputCB={(e) => this.noteKeysInput(e)}
                     saveButtonCB={(e) => this.saveButton(e)}
                     goToSearchButtonCB={(e) => this.goToSearchButton(e)}
-                    keys={state.keys}
-                    edited={state.edited}
+                    keys={state.note.keys}
+                    edited={state.note.edited}
                   />
                   <NoteText
                     textTextAreaCB={(e) => this.textTextArea(e)}
-                    text={state.text}
+                    text={state.note.text}
                   />
                 </div>
               )
