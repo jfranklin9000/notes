@@ -35,7 +35,7 @@ class Store {
   handleEvent(data) {
     let state = this.state
     const json = data.data
-    console.log('json', json)
+    // console.log('json', json)
 
     // this.initialReducer.reduce(json, this.state)
     // this.configReducer.reduce(json, this.state)

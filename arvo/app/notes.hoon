@@ -59,7 +59,7 @@
     ~&  >  %notes-on-init
     ^-  (quip card _this)
     =/  launcha
-      [%launch-action !>([%add %notes / '/~notes/js/tile.js'])]
+      [%launch-action !>([%add %notes /notestile '/~notes/js/tile.js'])]
     :_  this
     :~  [%pass / %arvo %e %connect [~ /'~notes'] %notes]
         [%pass /notes %agent [our.bowl %launch] %poke launcha]
@@ -183,11 +183,13 @@
     ::  ~&  >  %notes-on-watch
     |=  =path
     ^-  (quip card _this)
-    ?:  ?=([%http-response *] path)
-      `this
-    ?.  =(/primary path)
-      (on-watch:def path)
-    `this  ::  XX
+    ?+    path  (on-watch:def path)
+        [%http-response *]  `this
+    ::
+        [%primary ~]  `this
+    ::
+        [%notestile ~]  `this
+    ==
   ::
   ++  on-arvo
     ~&  >  %notes-on-arvo

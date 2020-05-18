@@ -72,7 +72,7 @@ export class Root extends Component {
 
   render() {
     const state = this.state
-    console.log('Root render()', state)
+    // console.log('Root render()', state)
 
     return (
       <BrowserRouter>

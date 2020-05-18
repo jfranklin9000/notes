@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class notesTile extends Component {
+export default class NotesTile extends Component {
 
   constructor(props) {
     super(props)
@@ -36,4 +36,4 @@ export default class notesTile extends Component {
 
 }
 
-window.notesTile = notesTile
+window.notesTile = NotesTile
