@@ -5,7 +5,6 @@ export class KeywordsSearchNewNote extends Component {
     const props = this.props
     const searchC = 'fl ml3 ba b--green2 green2 br1 pointer search-pad'
     const newNoteC = 'fr ml3 ba b--green2 green2 br1 pointer search-pad'
-    // do we need/want value={props.keys}? XX (don't seem to need it)
     return (
       <div className={'f6'}>
         <span className={'fl mr1 ba b--white gray3 search-pad'}>
@@ -14,6 +13,7 @@ export class KeywordsSearchNewNote extends Component {
         <input
           className={'fl w-50 ba b--gray3 br1 black search-pad pl2 pr2'}
           onChange={(e) => props.keysInputCB(e)}
+          value={props.keys}
         />
         <button
           className={searchC}
@@ -35,8 +35,8 @@ export class KeywordsSearchNewNote extends Component {
 // export
 class KeysNotIn extends Component {
   render() {
-    const keys = this.props.keysNi
-    if (keys == null || keys.length == 0)
+    const keys = this.props.keysNi || []
+    if (keys.length == 0)
       return null
     const message = keys.length == 1
       ? 'This keyword didn\'t match any notes'
@@ -81,11 +81,11 @@ function formatKeys(keysIn, keys)
 class Matches extends Component {
   render() {
     const props = this.props
-    const matches = props.matches
-    const keysIn = props.keysIn
+    const matches = props.matches || []
+    const keysIn = props.keysIn || []
     // combine with below XX
     // factor out <p> classNames XX
-    if (matches == null || matches.length == 0) {
+    if (matches.length == 0) {
       return (
         <p className={'f7 bt b--gray2 gray3 tc mt2 pt2 i'}>
           no matches
@@ -152,7 +152,6 @@ export class KeywordsSaveGoToSearch extends Component {
       saveC += ' b-gray3 gray3 pointer-events-none'
       goToSearchC += ' b-green2 green2'
     }
-    // do we need/want value={props.keys}? XX
     return (
       <div className={'f6'}>
         <span className={'fl mr1 ba b--white gray3 search-pad'}>
@@ -184,7 +183,6 @@ export class KeywordsSaveGoToSearch extends Component {
 export class NoteText extends Component {
   render() {
     const props = this.props
-    // do we need/want value={props.text}? XX
     return (
       <textarea
         className={

@@ -36,8 +36,11 @@ class Store {
     // this.configReducer.reduce(json, this.state)
     // this.updateReducer.reduce(json, this.state)
 
-    if (json.search !== undefined)
-      state.search = json.search
+    if (json.search !== undefined) {
+      const search = json.search
+      state.search = search
+      state.keys = search.keys.join(' ')
+    }
 
     if (json.note !== undefined) {
       const note = json.note
@@ -46,6 +49,7 @@ class Store {
       state.text = note.text
     }
 
+    // do we need this? XX
     if (json.edited !== undefined)
       state.edited = json.edited
 

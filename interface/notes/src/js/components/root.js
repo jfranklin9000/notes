@@ -13,7 +13,6 @@ export class Root extends Component {
   }
 
   keysInput(event) {
-    // don't want to set edited if on search page? XX
     this.setState({keys: event.target.value, edited: true})
   }
 
@@ -42,17 +41,15 @@ export class Root extends Component {
     const id = state ? state.id : 0
     const keys = state ? state.keys : ''
     const text = state ? state.text : ''
-    console.log('id', id, 'keys', keys, 'text', text)
     // fix this for new notes XX
     api.action('notes', 'json',
       {action: 'save', id: id, keys: keys, text: text})
   }
 
   goToSearchButton(event) {
-    // console.log('Root goToSearchButton()', this.state)
     // what about if note edited? XX
     // yeesh, probably not right, but it works
-    window.location.replace('/~notes')
+    window.location.replace('/~notes') // XX
   }
 
   textTextArea(event) {
@@ -61,15 +58,17 @@ export class Root extends Component {
 
   render() {
     const state = this.state
-    console.log('Root render()', state)
+    // console.log('Root render()', state)
 
     return (
       <BrowserRouter>
         <div className='absolute h-100 w-100 bg-gray0-d ph4-m ph4-l ph4-xl pb4-m pb4-l pb4-xl'>
           <HeaderBar/>
-          <Route exact path='/~notes' render={ () => {
+          <Route exact path='/~notes' render={() => {
+            // what about setting the url manually? XX
             if (state.id) {
               // user clicked New Note button
+              // or clicked on Search result
               return (
                 <Redirect to={'/~notes/note/' + state.id} />
               )
@@ -80,6 +79,7 @@ export class Root extends Component {
                   keysInputCB={(e) => this.keysInput(e)}
                   searchButtonCB={(e) => this.searchButton(e)}
                   newNoteButtonCB={(e) => this.newNoteButton(e)}
+                  keys={state.keys}
                 />
                 <SearchResults
                   matchClickCB={(e) => this.matchClick(e)}
@@ -88,10 +88,7 @@ export class Root extends Component {
               </div>
             )}}
           />
-          <Route exact path='/~notes/note/:id?' render={ props => {
-            // get id from here, it may be undefined XX
-            console.log(props.match.params)
-            // do we need to send keys? KeywordsSearchNewNote doesn't XX
+          <Route exact path='/~notes/note/:id' render={() => {
             return (
               <div className='cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden'>
                 <KeywordsSaveGoToSearch
