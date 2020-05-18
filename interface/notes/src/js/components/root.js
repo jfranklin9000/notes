@@ -17,12 +17,7 @@ export class Root extends Component {
   }
 
   searchButton(event) {
-    // on page reload this.state is null (not sure why), so
-    // if you immediately click the Search button you get:
-    // Uncaught TypeError: Cannot read property 'keys' of null
-    // do something reasonable until i figure it out: XX
-    // is this true with my new callback scheme? XX
-    const keys = this.state ? this.state.keys : ''
+    const keys = this.state.keys
     api.action('notes', 'json', {action: 'search', keys: keys})
   }
 
@@ -30,18 +25,15 @@ export class Root extends Component {
     api.action('notes', 'json', {action: 'new-note'})
   }
 
-  matchClick(event) {
-    const id = parseInt(event.target.getAttribute('id'))
+  matchClick(event, id) {
     api.action('notes', 'json', {action: 'get-note', id: id})
   }
 
   saveButton(event) {
-    // see searchButton note about page reload
     const state = this.state
-    const id = state ? state.id : 0
-    const keys = state ? state.keys : ''
-    const text = state ? state.text : ''
-    // fix this for new notes XX
+    const id = state.id
+    const keys = state.keys
+    const text = state.text
     api.action('notes', 'json',
       {action: 'save', id: id, keys: keys, text: text})
   }
@@ -82,7 +74,7 @@ export class Root extends Component {
                   keys={state.keys}
                 />
                 <SearchResults
-                  matchClickCB={(e) => this.matchClick(e)}
+                  matchClickCB={(e, id) => this.matchClick(e, id)}
                   search={state.search}
                 />
               </div>

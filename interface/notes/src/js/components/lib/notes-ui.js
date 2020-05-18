@@ -95,21 +95,19 @@ class Matches extends Component {
     const ms = matches.map((match, n) => {
       let notes = match.notes.map((note, n) => {
         let text = note.text
-        let pC = 'f7 bt b--gray4 mt2 pt2 pointer mono ws-pre'
+        let pC = 'f7 bt b--gray4 mt2 pt2 mono ws-pre'
         if (text == '') {
           text = 'no text'
           pC += ' i tc'
         }
         return (
-          <div key={n}>
+          <div
+            key={n}
+            className={'pointer'}
+            onClick={(e) => props.matchClickCB(e, note.id)}
+          >
             {formatKeys(keysIn, note.keys)}
-            <p
-              className={pC}
-              onClick={(e) => props.matchClickCB(e)}
-              id={note.id}
-            >
-              {text}
-            </p>
+            <p className={pC}>{text}</p>
           </div>
         )
       })
