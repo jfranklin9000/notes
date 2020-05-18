@@ -12,8 +12,13 @@ export class Root extends Component {
     store.setStateHandler(this.setState.bind(this))
   }
 
-  keysInput(event) {
-    this.setState({keys: event.target.value, edited: true})
+  // search page
+
+  // not used yet XX
+  searchKeysInput(event) {
+    let state = this.state
+    state.search.kews = event.target.value
+    this.setState(state)
   }
 
   searchButton(event) {
@@ -27,6 +32,12 @@ export class Root extends Component {
 
   matchClick(event, id) {
     api.action('notes', 'json', {action: 'get-note', id: id})
+  }
+
+  // note page
+
+  keysInput(event) {
+    this.setState({keys: event.target.value, edited: true})
   }
 
   saveButton(event) {
@@ -57,53 +68,43 @@ export class Root extends Component {
         <div className='absolute h-100 w-100 bg-gray0-d ph4-m ph4-l ph4-xl pb4-m pb4-l pb4-xl'>
           <HeaderBar/>
           <Route exact path='/~notes' render={() => {
-            // what about setting the url manually? XX
-            if (state.id != 0) {
-// console.log('ID:', state.id, 'redirecting to /~notes/note/' + state.id)
-              // user clicked New Note button
-              // or clicked on Search result
-              return (
-                <Redirect to={'/~notes/note/' + state.id} />
-              )
-            }
-            return (
-              <div className='cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden'>
-                <KeywordsSearchNewNote
-                  keysInputCB={(e) => this.keysInput(e)}
-                  searchButtonCB={(e) => this.searchButton(e)}
-                  newNoteButtonCB={(e) => this.newNoteButton(e)}
-                  keys={state.keys}
-                />
-                <SearchResults
-                  matchClickCB={(e, id) => this.matchClick(e, id)}
-                  search={state.search}
-                />
-              </div>
-            )}}
-          />
-          <Route exact path='/~notes/note/:id' render={() => {
+            const containerC =
+              'cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 f9 overflow-x-hidden ' +
+              'h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl white-d'
             if (state.id == 0) {
-// console.log('ID:', state.id, 'redirecting to /~notes')
-              // user clicked Go To Search button
+              // search page
               return (
-                <Redirect to={'/~notes'} />
+                <div className={containerC}>
+                  <KeywordsSearchNewNote
+                    keysInputCB={(e) => this.keysInput(e)}
+                    searchButtonCB={(e) => this.searchButton(e)}
+                    newNoteButtonCB={(e) => this.newNoteButton(e)}
+                    keys={state.keys}
+                  />
+                  <SearchResults
+                    matchClickCB={(e, id) => this.matchClick(e, id)}
+                    search={state.search}
+                  />
+                </div>
               )
-            }
-            return (
-              <div className='cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden'>
-                <KeywordsSaveGoToSearch
-                  keysInputCB={(e) => this.keysInput(e)}
-                  saveButtonCB={(e) => this.saveButton(e)}
-                  goToSearchButtonCB={(e) => this.goToSearchButton(e)}
-                  keys={state.keys}
-                  edited={state.edited}
-                />
-                <NoteText
-                  textTextAreaCB={(e) => this.textTextArea(e)}
-                  text={state.text}
-                />
-              </div>
-            )}}
+            } else {
+              // note page
+              return (
+                <div className={containerC}>
+                  <KeywordsSaveGoToSearch
+                    keysInputCB={(e) => this.keysInput(e)}
+                    saveButtonCB={(e) => this.saveButton(e)}
+                    goToSearchButtonCB={(e) => this.goToSearchButton(e)}
+                    keys={state.keys}
+                    edited={state.edited}
+                  />
+                  <NoteText
+                    textTextAreaCB={(e) => this.textTextArea(e)}
+                    text={state.text}
+                  />
+                </div>
+              )
+            }}}
           />
         </div>
       </BrowserRouter>

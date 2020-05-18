@@ -5,16 +5,20 @@
 class Store {
   constructor() {
     this.state = {
-      id: 0,
-      keys: '',
-      text: '',
-      edited: false,
-      //
+      // search page
       search: {
+        // id: 0, // ?
+        kews: '',
         keysIn: [],
         keysNi: [],
         matches: []
-      }
+      },
+      // note page
+      id: 0,
+      keys: '',
+      text: '',
+      edited: false
+      //
     }
 
     // this.initialReducer = new InitialReducer()
