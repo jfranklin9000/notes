@@ -53324,140 +53324,315 @@
               }
             }
 
-            const _jsxFileName$3 = "/Volumes/sensitive/URBIT/notes/interface/notes/src/js/components/root.js";
+            const _jsxFileName$3 = "/Volumes/sensitive/URBIT/notes/interface/notes/src/js/components/lib/notes-ui.js";
+            class KeywordsSearchNewNote extends react_1 {
+              render() {
+                const props = this.props;
+                const searchC = 'fl ml3 ba b--green2 green2 br1 pointer search-pad';
+                const newNoteC = 'fr ml3 ba b--green2 green2 br1 pointer search-pad';
+                return (
+                  react.createElement('div', { className: 'f6', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 9}}
+                    , react.createElement('span', { className: 'fl mr1 ba b--white gray3 search-pad', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 10}}, "Keywords"
+
+                    )
+                    , react.createElement('input', {
+                      className: 'fl w-50 ba b--gray3 br1 black search-pad pl2 pr2',
+                      onChange: (e) => props.keysInputCB(e),
+                      value: props.keys, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 13}}
+                    )
+                    , react.createElement('button', {
+                      className: searchC,
+                      onClick: (e) => props.searchButtonCB(e), __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 18}}
+                    , "Search"
+
+                    )
+                    , react.createElement('button', {
+                      className: newNoteC,
+                      onClick: (e) => props.newNoteButtonCB(e), __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 24}}
+                    , "New Note"
+
+                    )
+                  )
+                )
+              }
+            }
+
+            // export
+            class KeysNotIn extends react_1 {
+              render() {
+                const keys = this.props.keysNi || [];
+                if (keys.length == 0)
+                  return null
+                const message = keys.length == 1
+                  ? 'This keyword didn\'t match any notes'
+                  : 'These keywords didn\'t match any notes';
+                const ks = keys.map((key, n) => {
+                  return (
+                    react.createElement('span', { key: n, className: 'f6 red2 ml1 mr1', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 46}}
+                      , key
+                    )
+                  )
+                });
+                return (
+                  react.createElement('div', { className: 'mt3', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 52}}
+                    , react.createElement('p', { className: 'f8 tc mb1', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 53}}, message)
+                    , react.createElement('div', { className: 'mb3 tc', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 54}}, ks)
+                  )
+                )
+              }
+            }
+
+            function formatKeys(keysIn, keys)
+            {
+              keysIn = keysIn || [];
+              keys = keys || [];
+              let ks = keys.map((key, n) => {
+                const color =
+                  keysIn.some((k) => {return k == key}) ? 'green2' : 'gray3';
+                return (
+                  react.createElement('span', { key: n, className: 'ml1 mr1 ' + color, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 68}}
+                    , key
+                  )
+                )
+              });
+              if (ks.length == 0)
+                ks = react.createElement('span', { className: 'gray3 i', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 74}}, "no keywords" );
+              return (
+                react.createElement('div', { className: 'f7 bt b--gray2 mt2 pt2 tc', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 76}}, ks)
+              )
+            }
+
+            // export
+            class Matches extends react_1 {
+              render() {
+                const props = this.props;
+                const matches = props.matches || [];
+                const keysIn = props.keysIn || [];
+                // combine with below XX
+                // factor out <p> classNames XX
+                if (matches.length == 0) {
+                  return (
+                    react.createElement('p', { className: 'f7 bt b--gray2 gray3 tc mt2 pt2 i', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 90}}, "no matches"
+
+                    )
+                  )
+                }
+                const ms = matches.map((match, n) => {
+                  let notes = match.notes.map((note, n) => {
+                    let text = note.text;
+                    let pC = 'f7 bt b--gray4 mt2 pt2 mono ws-pre';
+                    if (text == '') {
+                      text = 'no text';
+                      pC += ' i tc';
+                    }
+                    return (
+                      react.createElement('div', {
+                        key: n,
+                        className: 'pointer',
+                        onClick: (e) => props.matchClickCB(e, note.id), __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 104}}
+                      
+                        , formatKeys(keysIn, note.keys)
+                        , react.createElement('p', { className: pC, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 110}}, text)
+                      )
+                    )
+                  });
+                  return (
+                    react.createElement('div', { key: n, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 115}}, notes)
+                  )
+                });
+                return (
+                  react.createElement('div', { className: 'bb b--gray2 pb2', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 119}}, ms)
+                )
+              }
+            }
+
+            class SearchResults extends react_1 {
+              render() {
+                const props = this.props;
+                const search = props.search;
+                return (
+                  react.createElement('div', { className: 'mt2', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 129}}
+                    , react.createElement(KeysNotIn, { keysNi: search.keysNi, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 130}} )
+                    , react.createElement(Matches, {
+                      matchClickCB: props.matchClickCB,
+                      matches: search.matches,
+                      keysIn: search.keysIn, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 131}}
+                    )
+                  )
+                )
+              }
+            }
+
+            class KeywordsSaveGoToSearch extends react_1 {
+              render() {
+                const props = this.props;
+                let saveC = 'fr ml3 ba br1 search-pad';
+                let goToSearchC = 'fr ml3 ba br1 pointer search-pad';
+                if (props.edited) {
+                  saveC += ' b-red2 red2 pointer';
+                  goToSearchC += ' b-yellow2 yellow2';
+                } else {
+                  saveC += ' b-gray3 gray3 pointer-events-none';
+                  goToSearchC += ' b-green2 green2';
+                }
+                return (
+                  react.createElement('div', { className: 'f6', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 154}}
+                    , react.createElement('span', { className: 'fl mr1 ba b--white gray3 search-pad', __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 155}}, "Keywords"
+
+                    )
+                    , react.createElement('input', {
+                      className: 'fl w-50 ba b--gray3 br1 black search-pad pl2 pr2',
+                      onChange: (e) => props.keysInputCB(e),
+                      value: props.keys, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 158}}
+                    )
+                    /* swap button order because they're float:right */
+                    , react.createElement('button', {
+                      className: goToSearchC,
+                      onClick: (e) => props.goToSearchButtonCB(e), __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 164}}
+                    , "Go To Search"
+
+                    )
+                    , react.createElement('button', {
+                      className: saveC,
+                      onClick: (e) => props.saveButtonCB(e), __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 170}}
+                    , "Save"
+
+                    )
+                  )
+                )
+              }
+            }
+
+            class NoteText extends react_1 {
+              render() {
+                const props = this.props;
+                return (
+                  react.createElement('textarea', {
+                    className: 
+                      'pa2 pre mono f7 mt3 ba b--gray4 lh-copy ' +
+                      'overflow-auto flex-basis-100 resize-none'
+                    ,
+                    onChange: (e) => props.textTextAreaCB(e),
+                    value: props.text, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 185}}
+                  
+                  )
+                )
+              }
+            }
+
+            const _jsxFileName$4 = "/Volumes/sensitive/URBIT/notes/interface/notes/src/js/components/root.js";
             class Root extends react_1 {
 
               constructor(props) {
-                // console.log('Root constructor()', props);
                 super(props);
                 this.state = store.state;
                 store.setStateHandler(this.setState.bind(this));
               }
 
-              keys(event) {
-                // console.log('Root keys()', event.target.value);
-                this.setState({ keys: event.target.value });
+              // search page
+
+              searchKeysInput(event) {
+                let state = this.state;
+                state.search.keys = event.target.value;
+                this.setState(state);
               }
 
-              search() {
-                // console.log('Root search()', this.state);
+              searchButton(event) {
+                const keys = this.state.search.keys;
+                api.action('notes', 'json', {action: 'search', keys: keys});
+              }
+
+              newNoteButton(event) {
+                api.action('notes', 'json', {action: 'new-note'});
+              }
+
+              matchClick(event, id) {
+                api.action('notes', 'json', {action: 'get-note', id: id});
+              }
+
+              // note page
+
+              noteKeysInput(event) {
+                let state = this.state;
+                state.note.keys = event.target.value;
+                state.note.edited = true;
+                this.setState(state);
+              }
+
+              saveButton(event) {
+                const state = this.state;
+                const id = state.id;
+                const keys = state.note.keys;
+                const text = state.note.text;
                 api.action('notes', 'json',
-                  { action: 'search', keys: this.state.keys });
+                  {action: 'save', id: id, keys: keys, text: text});
               }
 
-              text() {
-                // console.log('Root text()', event.target.value);
-                this.setState({ text: event.target.value });
+              goToSearchButton(event) {
+                const state = this.state;
+                let keys = state.note.keys;
+                if (state.note.edited) {
+                  if (confirm('Your edits will be lost.  Are you sure?'))
+                    keys = state.search.keys;
+                  else
+                    return
+                }
+                api.action('notes', 'json', {action: 'search', keys: keys});
               }
 
-              add() {
-                // console.log('Root add()', this.state);
-                api.action('notes', 'json',
-                  { action: 'add', id: 0, keys: this.state.keys, text: this.state.text });
-
-                // need a redirect to /~notes/edit (/~notes for now)
-                // could not get this to work XX
-                // return <Redirect to='/~notes' />;
-                // yeesh, probably not right, but it works
-                window.location.replace("/~notes");
-              }
-
-              // should be a Component? FIXME
-              matches() {
-                // console.log('Root matches()', this.state);
-                if (this.state.search === null)
-                  return '<p><i>no matches</i></p>';
-
-                let matches = this.state.search.map(function(match) {
-                  // console.log('match', match);
-
-                  // let keys = '<span>' + match.keys.join(' ') + '</span>';
-                  // console.log('keys', keys);
-
-                  let notes = match.notes.map(function(note) {
-                    return '<p>' + note.text + '</p>';
-                  });
-                  // console.log('notes', notes);
-
-                  // add Edit button XX
-                  return '<div>' + notes.join('<br>') + '</div>';
-                });
-
-                return matches.join('<br>');
+              textTextArea(event) {
+                let state = this.state;
+                state.note.text = event.target.value;
+                state.note.edited = true;
+                this.setState(state);
               }
 
               render() {
-                const { props, state } = this; // move up?
-
-                console.log('Root render()', state, props);
-
-                // need a New Note button on main page XX
+                const state = this.state;
+                // console.log('Root render()', state)
 
                 return (
-                  react.createElement(BrowserRouter, {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 74}}
-                    , react.createElement('div', { className: "absolute h-100 w-100 bg-gray0-d ph4-m ph4-l ph4-xl pb4-m pb4-l pb4-xl"         , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 75}}
-                      , react.createElement(HeaderBar, {__self: this, __source: {fileName: _jsxFileName$3, lineNumber: 76}})
-                      , react.createElement(Route, { exact: true, path: "/~notes", render:  () => {
-                        return (
-                          react.createElement('div', { className: "cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden"                 , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 79}}
-
-                            , react.createElement('p', { style: { fontSize: 1.0 + 'rem', color: 'lightgray' }, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 81}}, "Search notes with keywords"
-
+                  react.createElement(BrowserRouter, {__self: this, __source: {fileName: _jsxFileName$4, lineNumber: 78}}
+                    , react.createElement('div', { className: "absolute h-100 w-100 bg-gray0-d ph4-m ph4-l ph4-xl pb4-m pb4-l pb4-xl"         , __self: this, __source: {fileName: _jsxFileName$4, lineNumber: 79}}
+                      , react.createElement(HeaderBar, {__self: this, __source: {fileName: _jsxFileName$4, lineNumber: 80}})
+                      , react.createElement(Route, { exact: true, path: "/~notes", render: () => {
+                        const containerC =
+                          'cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 f9 overflow-x-hidden ' +
+                          'h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl white-d';
+                        if (state.id == 0) {
+                          // search page
+                          return (
+                            react.createElement('div', { className: containerC, __self: this, __source: {fileName: _jsxFileName$4, lineNumber: 88}}
+                              , react.createElement(KeywordsSearchNewNote, {
+                                keysInputCB: (e) => this.searchKeysInput(e),
+                                searchButtonCB: (e) => this.searchButton(e),
+                                newNoteButtonCB: (e) => this.newNoteButton(e),
+                                keys: state.search.keys, __self: this, __source: {fileName: _jsxFileName$4, lineNumber: 89}}
+                              )
+                              , react.createElement(SearchResults, {
+                                matchClickCB: (e, id) => this.matchClick(e, id),
+                                search: state.search, __self: this, __source: {fileName: _jsxFileName$4, lineNumber: 95}}
+                              )
                             )
-
-                            /* do we want to set value here? */
-                            , react.createElement('input', { style: { background: 'lightgray',
-                                            fontSize: 1.5 + 'rem',
-                                            marginTop: 0.5 + 'rem' },
-                                   value:  state.keys ,
-                                   onChange:  this.keys.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 86}}
-                            )
-
-                            , react.createElement('button', { className: "mt3 fr f4"  ,
-                                    style: { color: 'lightgray', cursor: 'pointer' },
-                                    onClick:  this.search.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 93}}, "Search"
-
-                            )
-
-                            , react.createElement('div', { dangerouslySetInnerHTML: { __html: this.matches() }, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 99}}
-                            )
-
                           )
-                        )}, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 77}}
-                      )
-
-                      , react.createElement(Route, { exact: true, path: "/~notes/add", render:  () => {
-                        return (
-                          react.createElement('div', { className: "cf w-100 flex flex-column pa4 ba-m ba-l ba-xl b--gray2 br1 h-100 h-100-minus-40-s h-100-minus-40-m h-100-minus-40-l h-100-minus-40-xl f9 white-d overflow-x-hidden"                 , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 108}}
-
-                            , react.createElement('p', { style: { fontSize: 1.0 + 'rem', color: 'lightgray' }, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 110}}, "Add a note"
-
+                        } else {
+                          // note page
+                          return (
+                            react.createElement('div', { className: containerC, __self: this, __source: {fileName: _jsxFileName$4, lineNumber: 104}}
+                              , react.createElement(KeywordsSaveGoToSearch, {
+                                keysInputCB: (e) => this.noteKeysInput(e),
+                                saveButtonCB: (e) => this.saveButton(e),
+                                goToSearchButtonCB: (e) => this.goToSearchButton(e),
+                                keys: state.note.keys,
+                                edited: state.note.edited, __self: this, __source: {fileName: _jsxFileName$4, lineNumber: 105}}
+                              )
+                              , react.createElement(NoteText, {
+                                textTextAreaCB: (e) => this.textTextArea(e),
+                                text: state.note.text, __self: this, __source: {fileName: _jsxFileName$4, lineNumber: 112}}
+                              )
                             )
-
-                            /* do we want to set value here? */
-                            , react.createElement('input', { style: { background: 'lightgray',
-                                            fontSize: 1.5 + 'rem',
-                                            marginTop: 0.5 + 'rem' },
-                                   value:  state.keys ,
-                                   onChange:  this.keys.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 115}}
-                            )
-
-                            /* do we want to set value here? */
-                            , react.createElement('textarea', { className: "br pa2 pre"  ,
-                                      style: { flexBasis: '50%', resize: 'none' },
-                                      value:  state.text ,
-                                      onChange:  this.text.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 123}}
-                            
-                            )
-
-                            , react.createElement('button', { className: "mt3 fr f4"  ,
-                                    style: { color: 'lightgray', cursor: 'pointer' },
-                                    onClick:  this.add.bind(this) , __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 130}}, "Add"
-
-                            )
-
                           )
-                        )}, __self: this, __source: {fileName: _jsxFileName$3, lineNumber: 106}}
+                        }}, __self: this, __source: {fileName: _jsxFileName$4, lineNumber: 81}}
                       )
                     )
                   )
@@ -53471,7 +53646,7 @@
                 this.bindPaths = [];
               }
 
-              bind(path, method, ship = this.authTokens.ship, appl = "notes", success, fail) {
+              bind(path, method, ship = this.authTokens.ship, appl = 'notes', success, fail) {
                 this.bindPaths = lodash.uniq([...this.bindPaths, path]);
 
                 window.subscriptionId = window.urb.subscribe(ship, appl, path, 
@@ -53493,7 +53668,7 @@
               }
 
               notes(data) {
-                this.action("notes", "json", data);
+                this.action('notes', 'json', data);
               }
 
               action(appl, mark, data) {
@@ -53505,50 +53680,73 @@
                     (err) => {
                       reject(err);
                     });
-                });
+                })
               }
             }
+
             let api$1 = new UrbitApi();
             window.api = api$1;
 
-            // import { InitialReducer } from '/reducers/initial';
-            // import { ConfigReducer } from '/reducers/config';
-            // import { UpdateReducer } from '/reducers/update';
+            // import { InitialReducer } from '/reducers/initial'
+            // import { ConfigReducer } from '/reducers/config'
+            // import { UpdateReducer } from '/reducers/update'
 
             class Store {
-                constructor() {
-                    // console.log('Store constructor()');
-                    this.state = {
-                        keys: '',
-                        text: '',
-                        search: null
-                    };
+              constructor() {
+                this.state = {
+                  // id: =0 - search page, >0 - note page
+                  id: 0,
+                  // search page
+                  search: {
+                    keys: '',
+                    keysIn: [],
+                    keysNi: [],
+                    matches: []
+                  },
+                  // note page
+                  note: {
+                    keys: '',
+                    text: '',
+                    edited: false
+                  }
+                };
 
-                    // this.initialReducer = new InitialReducer();
-                    // this.configReducer = new ConfigReducer();
-                    // this.updateReducer = new UpdateReducer();
-                    this.setState = () => { };
+                // this.initialReducer = new InitialReducer()
+                // this.configReducer = new ConfigReducer()
+                // this.updateReducer = new UpdateReducer()
+                this.setState = () => { };
+              }
+
+              setStateHandler(setState) {
+                this.setState = setState;
+              }
+
+              handleEvent(data) {
+                let state = this.state;
+                const json = data.data;
+                // console.log('json', json)
+
+                // this.initialReducer.reduce(json, this.state)
+                // this.configReducer.reduce(json, this.state)
+                // this.updateReducer.reduce(json, this.state)
+
+                if (json.search !== undefined) {
+                  const search = json.search;
+                  state.id = 0;
+                  state.search = search;
+                  state.search.keys = search.keys.join(' ');
                 }
 
-                setStateHandler(setState) {
-                    // console.log('Store setStateHandler()', setState);
-                    this.setState = setState;
+                if (json.note !== undefined) {
+                  const note = json.note;
+                  state.id = note.id;
+                  state.note.keys = note.keys.join(' ');
+                  state.note.text = note.text;
+                  state.note.edited = false;
                 }
 
-                handleEvent(data) {
-                    console.log('Store handleEvent()', data);
-                    let json = data.data;
-                    console.log(json);
-
-                    // this.initialReducer.reduce(json, this.state);
-                    // this.configReducer.reduce(json, this.state);
-                    // this.updateReducer.reduce(json, this.state);
-                    if (json.keys !== undefined)
-                        this.state.keys = json.keys;
-                    if (json.search !== undefined)
-                        this.state.search = json.search;
-                    this.setState(this.state);
-                }
+                this.setState(state);
+              }
             }
 
             let store$1 = new Store();
@@ -53559,7 +53757,7 @@
                 if (api$1.authTokens) {
                   this.initializeNotes();
                 } else {
-                  console.error("~~~ ERROR: Must set api.authTokens before operation ~~~");
+                  console.error('~~~ ERROR: Must set api.authTokens before operation ~~~');
                 }
               }
 
@@ -53583,9 +53781,7 @@
 
             let subscription = new Subscription();
 
-            const _jsxFileName$4 = "/Volumes/sensitive/URBIT/notes/interface/notes/src/index.js";
-            console.log('hello from notes');
-
+            const _jsxFileName$5 = "/Volumes/sensitive/URBIT/notes/interface/notes/src/index.js";
             api$1.setAuthTokens({
               ship: window.ship
             });
@@ -53593,7 +53789,7 @@
             subscription.start();
 
             reactDom.render((
-              react.createElement(Root, {__self: undefined, __source: {fileName: _jsxFileName$4, lineNumber: 17}} )
+              react.createElement(Root, {__self: undefined, __source: {fileName: _jsxFileName$5, lineNumber: 14}} )
             ), document.querySelectorAll("#root")[0]);
 
 })));
