@@ -78,3 +78,13 @@ Start your fakezod and run these commands:
 ```
 
 Go to `localhost` (or `localhost:8080`, etc.) in your browser.
+
+## Screenshots
+
+### Search
+
+![Search](/images/search.png)
+
+### New Note
+
+![New Note](/images/new-note.png)
