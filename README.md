@@ -79,6 +79,10 @@ Start your fakezod and run these commands:
 
 Go to `localhost` (or `localhost:8080`, etc.) in your browser.
 
+## Demo
+
+[notes demo video](https://www.youtube.com/watch?v=7DurNjCFOmA)
+
 ## Screenshots
 
 ### Search
